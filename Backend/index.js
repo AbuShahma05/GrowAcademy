@@ -3,7 +3,7 @@ dotenv.config();
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from 'path'
+import path from "path";
 import connectToDb from "./config/db.js";
 
 // Import all routes
@@ -33,11 +33,11 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://growacademy.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
