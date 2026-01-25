@@ -67,7 +67,7 @@ app.use(
 );
 
 // Preflight support 
-app.options("*", cors());
+app.options(/.*/, cors());
 
 /* 
    STATIC FILES
