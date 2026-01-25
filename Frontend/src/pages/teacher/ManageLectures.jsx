@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../../services/api';
-import axios from 'axios';
 import {
   PlusIcon,
   TrashIcon,
@@ -99,19 +98,17 @@ const ManageLectures = () => {
         lectureData.append('videoUrl', formData.videoUrl);
       }
 
-      const token = localStorage.getItem('token');
       const endpoint = editingLecture
         ? `/lecture/${editingLecture._id}`
         : '/lecture/create';
       const method = editingLecture ? 'put' : 'post';
 
-      const response = await axios({
-        method: method,
-        url: `http://localhost:5000/api/v1${endpoint}`,
+      const response = await API.request({
+        method,
+        url: endpoint,
         data: lectureData,
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
@@ -126,6 +123,7 @@ const ManageLectures = () => {
           }
         }
       });
+
 
       if (response.data.success) {
         setUploadStatus('✓ Upload complete!');
