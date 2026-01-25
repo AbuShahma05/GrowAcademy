@@ -85,7 +85,7 @@ const WatchCourse = () => {
 
   const updateWatchTime = async (lectureId, watchTime) => {
     try {
-      await API.put(`/progress/${user._id}/${courseId}/lecture/${lectureId}`, {
+      await API.put(`/progress/${courseId}/${user._id}/lecture/${lectureId}`, {
         viewed: true,
         watchTime: Math.floor(watchTime)
       });
@@ -112,7 +112,7 @@ const WatchCourse = () => {
 
   const handleLectureComplete = async (lectureId, isAutoComplete = false) => {
     try {
-      await API.put(`/progress/${user._id}/${courseId}/lecture/${lectureId}`, {
+      await API.put(`/progress/${courseId}/${user._id}/lecture/${lectureId}`, {
         viewed: true,
         completed: true,
         watchTime: videoRef.current?.currentTime || 0
@@ -143,7 +143,7 @@ const WatchCourse = () => {
 
     if (!progress[lecture._id]?.viewed) {
       try {
-        await API.put(`/progress/${user._id}/${courseId}/lecture/${lecture._id}`, {
+        await API.put(`/progress/${courseId}/${user._id}/lecture/${lecture._id}`, {
           viewed: true
         });
 
@@ -297,12 +297,12 @@ const WatchCourse = () => {
                     key={lecture._id}
                     onClick={() => selectLecture(lecture)}
                     className={`w-full text-left p-3 md:p-4 rounded-lg transition ${isCurrent
-                        ? 'bg-blue-600 text-white'
-                        : isCompleted
-                          ? 'bg-green-900 text-green-100'
-                          : isViewed
-                            ? 'bg-yellow-900 text-yellow-100'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      ? 'bg-blue-600 text-white'
+                      : isCompleted
+                        ? 'bg-green-900 text-green-100'
+                        : isViewed
+                          ? 'bg-yellow-900 text-yellow-100'
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                       }`}
                   >
                     <div className="flex items-center gap-2 md:gap-3">
@@ -354,12 +354,12 @@ const WatchCourse = () => {
                         key={lecture._id}
                         onClick={() => selectLecture(lecture)}
                         className={`w-full text-left p-3 rounded-lg transition ${isCurrent
-                            ? 'bg-blue-600 text-white'
-                            : isCompleted
-                              ? 'bg-green-900 text-green-100'
-                              : isViewed
-                                ? 'bg-yellow-900 text-yellow-100'
-                                : 'bg-gray-700 text-gray-300'
+                          ? 'bg-blue-600 text-white'
+                          : isCompleted
+                            ? 'bg-green-900 text-green-100'
+                            : isViewed
+                              ? 'bg-yellow-900 text-yellow-100'
+                              : 'bg-gray-700 text-gray-300'
                           }`}
                       >
                         <div className="flex items-center gap-2">
