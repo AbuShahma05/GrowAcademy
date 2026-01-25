@@ -480,8 +480,8 @@ export const resetPassword = async (req, res) => {
 
     // Update user password and clear reset token
     user.password = hashedPassword;
-    (user.passwordresetToken = undefined),
-      (user.passwordResetExpires = undefined);
+    ((user.passwordresetToken = undefined),
+      (user.passwordResetExpires = undefined));
     await user.save();
 
     res.status(200).json({
@@ -550,7 +550,7 @@ export const enrollCourse = async (req, res) => {
 
     // Check if already enrolled
     const isEnrolled = user.enrolledCourses.some(
-      (course) => course.courseId.toString() === courseId
+      (course) => course.courseId.toString() === courseId,
     );
 
     if (isEnrolled) {
@@ -611,8 +611,8 @@ export const updateCourseProgress = async (req, res) => {
     }
 
     // Find and update course
-    const courseIndex = user.enrollCourse.findIndex(
-      (course) => course.courseId.toString() === courseId
+    const courseIndex = user.enrolledCourses.findIndex(
+      (course) => course.courseId.toString() === courseId,
     );
 
     if (courseIndex === -1) {
@@ -646,7 +646,7 @@ export const deactivateAccount = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { isActive: false },
-      { new: true }
+      { new: true },
     ).select("-password");
 
     if (!user) {
@@ -780,7 +780,7 @@ export const updateUserRole = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       userId,
       { role },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select("-password");
 
     if (!user) {
