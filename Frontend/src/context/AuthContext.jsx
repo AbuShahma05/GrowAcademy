@@ -70,6 +70,9 @@ export const AuthProvider = ({ children }) => {
 
   // Logout function
   const logout = async () => {
+    // Clear local state FIRST — don't wait for backend
+    setUser(null);
+    localStorage.removeItem('user');
     try {
       await API.post('/user/logout');
     } catch (error) {

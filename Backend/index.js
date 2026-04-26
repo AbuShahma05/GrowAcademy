@@ -22,23 +22,23 @@ const app = express();
 
 /* 
    DATABASE
- */
+*/
 connectToDb();
 
 /* 
    BODY PARSERS
- */
+*/
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 /* 
    COOKIE PARSER
- */
+*/
 app.use(cookieParser());
 
 /* 
-   CORS 
- */
+   CORS
+*/
 const allowedOrigins = [
   "http://localhost:5173",
   "https://growacademy.vercel.app",
@@ -47,7 +47,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server, Postman, etc.
+      // Allow server-to-server, Postman, curl, etc.
       if (!origin) return callback(null, true);
 
       // Allow known origins + all Vercel preview URLs
@@ -66,17 +66,19 @@ app.use(
   })
 );
 
-// Preflight support 
+// Preflight support
 app.options(/.*/, cors());
 
 /* 
    STATIC FILES
- */
+*/
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 /* 
-   HEALTH CHECK
- */
+   ROOT / HEALTH CHECK ROUTES
+   -- Both "/" and "/health" work so the keep-alive ping and 
+      Render's own health-check system both have a target.
+*/
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -84,9 +86,17 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: "ok",
+    timestamp: new Date().toISOString(),
+  });
+});
+
 /* 
    API ROUTES
- */
+*/
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/lecture", lectureRoute);
@@ -95,7 +105,7 @@ app.use("/api/v1/progress", courseProgressRoute);
 
 /* 
    404 HANDLER
- */
+*/
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -110,11 +120,31 @@ app.use(errorHandler);
 
 /* 
    SERVER
- */
+*/
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(` Server running on port ${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+
+  /* 
+     KEEP-ALIVE PING  
+     Render's free tier shuts the server down after ~15 min of inactivity.
+     We ping our own /health endpoint every 14 minutes to prevent cold starts.
+     This runs AFTER the server is confirmed listening.
+  */
+  const RENDER_URL =
+    process.env.RENDER_EXTERNAL_URL ||   // Render injects this automatically
+    `https://growacademy.onrender.com`;
+
+  const keepAlive = () => {
+    fetch(`${RENDER_URL}/health`)
+      .then(() => console.log(`[keep-alive] ping sent to ${RENDER_URL}/health`))
+      .catch((err) => console.warn("[keep-alive] ping failed:", err.message));
+  };
+
+  // Ping immediately once on boot, then every 14 minutes
+  keepAlive();
+  setInterval(keepAlive, 14 * 60 * 1000);
 });
 
 export default app;
