@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [8, "Password must be at least 8 characters"],
       maxlength: [128, "Password cannot exceed 128 characters"],
+      select: false, // never return password in queries by default
     },
 
     // Role Management
@@ -96,12 +97,25 @@ const userSchema = mongoose.Schema(
       twitter: String,
       youtube: String,
     },
+    emailVerificationToken: {
+      type: String,
+      default: undefined,
+    },
+    passwordresetToken: {
+      type: String,
+      default: undefined,
+    },
+
+    passwordResetExpires: {
+      type: Date,
+      default: undefined,
+    },
   },
   {
     timestamps: true,
     // indexes for better performance
     indexes: [{ email: 1 }, { username: 1 }, { role: 1 }],
-  }
+  },
 );
 
 const User = mongoose.model("User", userSchema);
