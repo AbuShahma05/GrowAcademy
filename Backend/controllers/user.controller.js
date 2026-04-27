@@ -73,7 +73,7 @@ export const registerUser = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registered successfully",
       success: true,
       user: {
@@ -87,9 +87,10 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Error while registering user",
       success: false,
+      ...(process.env.NODE_ENV !== "production" && { error: error.message }),
     });
   }
 };
@@ -162,6 +163,7 @@ export const loginUSer = async (req, res) => {
     res.status(500).json({
       message: "Error while logging in",
       success: false,
+      ...(process.env.NODE_ENV !== "production" && { error: error.message }),
     });
   }
 };
@@ -188,7 +190,7 @@ export const logOut = async (req, res) => {
   }
 };
 
-// Refrsh access token
+// Refresh access token
 export const refreshToken = async (req, res) => {
   try {
     const { refreshToken } = req.cookies;
@@ -229,12 +231,6 @@ export const refreshToken = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   try {
     const userId = req.user._id;
-    if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorized access",
-        success: false,
-      });
-    }
 
     const user = await User.findById(userId)
       .select("-password")
@@ -248,7 +244,7 @@ export const getUserProfile = async (req, res) => {
       });
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(404).json({
         message: "User not found",
         success: false,
       });
@@ -261,7 +257,7 @@ export const getUserProfile = async (req, res) => {
   } catch (error) {
     console.error("Error while fetching user profile", error);
     return res.status(500).json({
-      message: "failed to load user profile",
+      message: "Failed to load user profile",
       success: false,
     });
   }
@@ -271,12 +267,12 @@ export const getUserProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user._id || req.user?.id || req.id;
+    const { username, bio } = req.body;
+
     if (!userId)
       return res
         .status(401)
         .json({ message: "Unauthorized access", success: false });
-
-    const { username, bio } = req.body;
 
     // Parse socialLinks safely
     let socialLinks;
@@ -320,7 +316,7 @@ export const updateProfile = async (req, res) => {
 
       // Upload new photo
       const cloudResponse = await uploadMedia(profilePhoto.path);
-      if (!cloudResponse || !cloudResponse.secure_url) {
+      if (!cloudResponse || !cloudResponse?.secure_url) {
         return res.status(500).json({
           message: "Failed to upload profile photo",
           success: false,
@@ -394,8 +390,9 @@ export const changePassword = async (req, res) => {
     // update password
     await User.findByIdAndUpdate(userId, { password: hashedNewPassword });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Password changed successfully",
+      success: true,
     });
   } catch (error) {
     console.error("Change password error", error);
@@ -810,6 +807,7 @@ export const toggleUserStatus = async (req, res) => {
     const { userId } = req.params;
 
     const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({
         message: "User not found",
