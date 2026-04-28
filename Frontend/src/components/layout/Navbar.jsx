@@ -25,7 +25,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/courses" className="hover:text-[#fb7241] transition font-bold">
+            <Link to="/courses" className="hover:text-[#fb7241] transition ">
               Courses
             </Link>
 
