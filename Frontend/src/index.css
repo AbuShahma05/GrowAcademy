@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+/* ============================================
+   TAILWIND v4 — Custom Theme
+   tailwind.config.js nahi hota v4 mein,
+   sab yahan @theme mein likhte hain
+   ============================================ */
+
+@theme {
+  /* ── Font ────────────────────────────────── */
+  --font-sans: "Urbanist", sans-serif;
+
+  /* ── Brand Colors ────────────────────────── */
+  --color-ga-bg: #fbf5f0; /* cream background    */
+  --color-ga-surface: #ffffff; /* white cards         */
+  --color-ga-primary: #ff6b35; /* orange CTA button   */
+  --color-ga-dark: #1a1a2e; /* dark headings       */
+  --color-ga-muted: #6b7280; /* gray body text      */
+  --color-ga-accent: #4caf50; /* green accent        */
+  --color-ga-light: #fef3ee; /* light peach section */
+}
+
+/* ── Global Styles ───────────────────────────── */
+body {
+  font-family: "Urbanist", sans-serif;
+  background-color: #fbf5f0;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Urbanist", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button,
+a {
+  transition: all 0.2s ease;
+}
