@@ -1,4 +1,5 @@
 import Studentphoto from '../assets/Studentphoto.png'
+import Google from '../assets/Google.png'
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
@@ -63,13 +64,13 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 <Link
                   to="/register"
-                  className="bg-green-500 text-white px-6 md:px-8 py-3 rounded-lg font-semibold"
+                  className="bg-green-500 text-white px-6 md:px-8 py-3 rounded-xl font-semibold"
                 >
                   Get Started
                 </Link>
                 <Link
                   to="/courses"
-                  className="bg-transparent border-2 border-white text-white px-6 md:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-orange-400 transition"
+                  className="bg-transparent border-2 border-white text-white px-6 md:px-8 py-3 rounded-xl font-semibold hover:bg-white hover:text-orange-400 transition"
                 >
                   Browse Courses
                 </Link>
@@ -91,6 +92,8 @@ const Home = () => {
               alt="student"
               className="w-full max-w-lg md:max-w-xl drop-shadow-xl"
             />
+
+            <img src="Google" alt="Logo" />
           </div>
 
         </div>
