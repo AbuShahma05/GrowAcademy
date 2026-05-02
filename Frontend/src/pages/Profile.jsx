@@ -190,7 +190,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+    <div className="min-h-screen bg-neutral-200 py-4 sm:py-6 md:py-8">
       <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-4xl">
         {/* Header - Responsive */}
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
@@ -199,12 +199,12 @@ const Profile = () => {
               <img
                 src={photoPreview || 'https://via.placeholder.com/100'}
                 alt={user?.username}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-blue-600"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-3 border-[#fb7241]"
               />
               {activeTab === 'profile' && (
                 <label
                   htmlFor="photo-upload"
-                  className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 sm:p-2 rounded-full cursor-pointer hover:bg-blue-700 transition"
+                  className="absolute bottom-0 right-0 bg-black text-white p-1.5 sm:p-2 rounded-full cursor-pointer hover:bg-[#fb7241] transition"
                 >
                   <CameraIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   <input
@@ -221,8 +221,8 @@ const Profile = () => {
               <h1 className="text-2xl sm:text-3xl font-bold break-words">{user?.username}</h1>
               <p className="text-sm sm:text-base text-gray-600 break-all">{user?.email}</p>
               <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${user?.role === 'Admin' ? 'bg-red-100 text-red-700' :
-                user?.role === 'Teacher' ? 'bg-blue-100 text-blue-700' :
-                  'bg-green-100 text-green-700'
+                user?.role === 'Teacher' ? 'bg-blue-100 text-black' :
+                  'bg-green-100 text-[#fb7241]'
                 }`}>
                 {user?.role}
               </span>
@@ -244,8 +244,8 @@ const Profile = () => {
             <button
               onClick={() => setActiveTab('profile')}
               className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'profile'
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-blue-600'
+                ? 'border-b-2 border-[#fb7241] text-black'
+                : 'text-gray-600 hover:text-[#fb7241]'
                 }`}
             >
               <UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
@@ -254,8 +254,8 @@ const Profile = () => {
             <button
               onClick={() => setActiveTab('password')}
               className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'password'
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-blue-600'
+                ? 'border-b-2 border-[#fb7241] text-black'
+                : 'text-gray-600 hover:text-[#fb7241]'
                 }`}
             >
               <KeyIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
@@ -264,8 +264,8 @@ const Profile = () => {
             <button
               onClick={() => setActiveTab('settings')}
               className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'settings'
-                ? 'border-b-2 border-blue-600 text-blue-600'
-                : 'text-gray-600 hover:text-blue-600'
+                ? 'border-b-2 border-[#fb7241] text-black'
+                : 'text-gray-600 hover:text-[#fb7241]'
                 }`}
             >
               <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
@@ -285,7 +285,7 @@ const Profile = () => {
                   type="text"
                   value={profileData.username}
                   onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   required
                   minLength={3}
                   maxLength={25}
@@ -298,7 +298,7 @@ const Profile = () => {
                   value={profileData.bio}
                   onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
                   rows={4}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   placeholder="Tell us about yourself..."
                   maxLength={500}
                 />
@@ -318,7 +318,7 @@ const Profile = () => {
                       ...profileData,
                       socialLinks: { ...profileData.socialLinks, website: e.target.value }
                     })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   />
                   <input
                     type="url"
@@ -328,7 +328,7 @@ const Profile = () => {
                       ...profileData,
                       socialLinks: { ...profileData.socialLinks, linkedin: e.target.value }
                     })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   />
                   <input
                     type="url"
@@ -338,7 +338,7 @@ const Profile = () => {
                       ...profileData,
                       socialLinks: { ...profileData.socialLinks, twitter: e.target.value }
                     })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   />
                   <input
                     type="url"
@@ -348,7 +348,7 @@ const Profile = () => {
                       ...profileData,
                       socialLinks: { ...profileData.socialLinks, youtube: e.target.value }
                     })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   />
                 </div>
               </div>
@@ -356,7 +356,7 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-blue-700 disabled:bg-gray-400 transition"
+                className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-[#fb7241] disabled:bg-gray-400 transition"
               >
                 {loading ? 'Saving...' : 'Save Changes'}
               </button>
@@ -372,7 +372,7 @@ const Profile = () => {
                   type="password"
                   value={passwordData.currentPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   required
                 />
               </div>
@@ -383,7 +383,7 @@ const Profile = () => {
                   type="password"
                   value={passwordData.newPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   required
                   minLength={8}
                 />
@@ -396,7 +396,7 @@ const Profile = () => {
                   type="password"
                   value={passwordData.confirmPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                   required
                 />
               </div>
@@ -404,7 +404,7 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-blue-700 disabled:bg-gray-400 transition"
+                className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-[#fb7241] disabled:bg-gray-400 transition"
               >
                 {loading ? 'Changing Password...' : 'Change Password'}
               </button>

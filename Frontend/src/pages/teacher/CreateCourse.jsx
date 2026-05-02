@@ -81,16 +81,15 @@ const CreateCourse = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 md:py-8">
+    <div className="min-h-screen bg-neutral-200 py-4 md:py-8">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6 md:mb-8">
           <button
             onClick={() => navigate('/teacher/dashboard')}
-            className="flex items-center gap-2 text-gray-600 hover:text-blue-600"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#fb7241]"
           >
             <ArrowLeftIcon className="w-5 h-5" />
-            <span className="hidden sm:inline">Back</span>
           </button>
           <h1 className="text-2xl md:text-3xl font-bold">Create New Course</h1>
         </div>
@@ -104,7 +103,7 @@ const CreateCourse = () => {
               name="courseTitle"
               value={formData.courseTitle}
               onChange={handleChange}
-              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
               placeholder="e.g., Complete Web Development Bootcamp"
               required
               maxLength={100}
@@ -119,7 +118,7 @@ const CreateCourse = () => {
               name="subTitle"
               value={formData.subTitle}
               onChange={handleChange}
-              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
               placeholder="A brief description"
               maxLength={120}
             />
@@ -133,7 +132,7 @@ const CreateCourse = () => {
               value={formData.description}
               onChange={handleChange}
               rows={6}
-              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+              className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
               placeholder="Detailed course description..."
               required
               maxLength={2000}
@@ -148,7 +147,7 @@ const CreateCourse = () => {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 required
               >
                 {categories.map(cat => (
@@ -163,7 +162,7 @@ const CreateCourse = () => {
                 name="courseLevel"
                 value={formData.courseLevel}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 required
               >
                 <option value="Beginner">Beginner</option>
@@ -182,7 +181,7 @@ const CreateCourse = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 placeholder="e.g., Hinglish, English"
                 required
               />
@@ -195,7 +194,7 @@ const CreateCourse = () => {
                 name="subCategory"
                 value={formData.subCategory}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 placeholder="e.g., Web Development"
               />
             </div>
@@ -210,7 +209,7 @@ const CreateCourse = () => {
                 name="coursePrice"
                 value={formData.coursePrice}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 placeholder="499"
                 required
                 min="0"
@@ -224,7 +223,7 @@ const CreateCourse = () => {
                 name="originalPrice"
                 value={formData.originalPrice}
                 onChange={handleChange}
-                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                 placeholder="999"
                 min="0"
               />
@@ -235,7 +234,7 @@ const CreateCourse = () => {
           {/* Thumbnail */}
           <div>
             <label className="block font-semibold mb-2 text-sm md:text-base">Course Thumbnail *</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 md:p-6 text-center">
+            <div className="border-2 border-dashed border-gray-500 rounded-lg p-4 md:p-6 text-center">
               {formData.courseThumbnail ? (
                 <div className="relative">
                   <img
@@ -268,7 +267,7 @@ const CreateCourse = () => {
                   />
                   <label
                     htmlFor="thumbnail-upload"
-                    className="inline-block mt-4 bg-blue-600 text-white px-4 md:px-6 py-2 rounded cursor-pointer hover:bg-blue-700 text-sm md:text-base"
+                    className="inline-block mt-4 bg-black text-white px-4 md:px-6 py-2 rounded-xl cursor-pointer hover:bg-[#fb7241] text-sm md:text-base"
                   >
                     Choose File
                   </label>
@@ -282,7 +281,7 @@ const CreateCourse = () => {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-blue-600 text-white py-2 md:py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition text-sm md:text-base"
+              className="flex-1 bg-black text-white py-2 md:py-3 rounded-xl font-semibold hover:bg-[#fb7241] disabled:bg-gray-400 transition text-sm md:text-base"
             >
               {loading ? 'Creating Course...' : 'Create Course'}
             </button>

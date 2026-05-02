@@ -77,37 +77,37 @@ const TeacherDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#fb7241]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 md:py-8">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-neutral-200 py-4 md:py-8">
+      <div className="container mx-auto px-12">
         {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8 px-2">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">Instructor Dashboard</h1>
-            <p className="text-sm md:text-base text-gray-600">Manage your courses and track performance</p>
+            <h1 className="text-xl md:text-3xl font-bold mb-2 ">Instructor Dashboard</h1>
+            <p className="text-sm md:text-base text-gray-600 ">Manage your courses and track performance</p>
           </div>
           <Link
             to="/teacher/create-course"
-            className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-4 md:px-6 py-3 rounded-lg hover:bg-blue-700 transition text-sm md:text-base"
+            className="w-full md:w-auto flex items-center justify-center bg-black text-white px-8 md:px-6 py-3 rounded-xl hover:bg-[#fb7241] transition text-sm md:text-base"
           >
-            <PlusIcon className="w-5 h-5" />
+            <PlusIcon className="w-5 h-5 rounded-xl" />
             Create New Course
           </Link>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 md:gap-6 mb-8 md:mb-8">
           {statCards.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-4 md:p-6">
-              <div className={`${stat.color} w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white mb-3 md:mb-4`}>
+            <div key={index} className="bg-white rounded-lg shadow-md p-4 md:p-6 text-center">
+              <div className={`${stat.color} w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white mb-3 md:mb-4 mx-auto`}>
                 {stat.icon}
               </div>
-              <h3 className="text-gray-600 text-xs md:text-sm mb-1">{stat.title}</h3>
+              <h3 className="text-gray-600 text-xs md:text-sm">{stat.title}</h3>
               <p className="text-lg md:text-3xl font-bold truncate">{stat.value}</p>
             </div>
           ))}
@@ -115,15 +115,15 @@ const TeacherDashboard = () => {
 
         {/* Courses List */}
         <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Your Courses</h2>
+          <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-center">Your Courses</h2>
 
           {courses.length === 0 ? (
-            <div className="text-center py-12">
-              <BookOpenIcon className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-sm md:text-base text-gray-600 mb-4">You haven't created any courses yet</p>
+            <div className="text-center py-12 ">
+              <BookOpenIcon className="w-12 h-12 md:w-16 md:h-16 text-gray-600 mx-auto " />
+              <p className="text-sm md:text-base text-gray-600 mb-8">You haven't created any courses yet</p>
               <Link
                 to="/teacher/create-course"
-                className="inline-block bg-blue-600 text-white px-4 md:px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm md:text-base"
+                className="inline-block bg-black text-white px-4 md:px-6 py-2 rounded-xl hover:bg-[#fb7241] transition text-sm md:text-base"
               >
                 Create Your First Course
               </Link>
@@ -150,8 +150,8 @@ const TeacherDashboard = () => {
 
                     <div className="flex items-center justify-between mb-3">
                       <span className={`text-xs px-2 py-1 rounded-full font-semibold ${course.isPublished
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-yellow-100 text-yellow-700'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
                         }`}>
                         {course.isPublished ? 'Published' : 'Draft'}
                       </span>
@@ -213,8 +213,8 @@ const TeacherDashboard = () => {
                         </td>
                         <td className="px-6 py-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${course.isPublished
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-yellow-100 text-yellow-700'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
                             }`}>
                             {course.isPublished ? 'Published' : 'Draft'}
                           </span>

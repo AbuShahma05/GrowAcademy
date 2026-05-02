@@ -6,30 +6,30 @@ import { useAuth } from '../../hooks/useAuth';
 const EyeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-    <circle cx="12" cy="12" r="3"/>
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
   </svg>
 );
 const EyeOffIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
     fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-    <line x1="1" y1="1" x2="23" y2="23"/>
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+    <line x1="1" y1="1" x2="23" y2="23" />
   </svg>
 );
 
 // ─────────────────────────────────────────────────────────────────────
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError]   = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   // NEW ↓ show/hide state
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login }  = useAuth();
-  const navigate   = useNavigate();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8'>
+    <div className='min-h-screen flex items-center justify-center bg-neutral-200 px-4 py-8'>
       <div className='bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md'>
         <h2 className='text-2xl md:text-3xl font-bold mb-6 text-center'>
           Login
@@ -68,7 +68,7 @@ const Login = () => {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className='w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base'
+              className='w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base'
               required
             />
           </div>
@@ -81,7 +81,7 @@ const Login = () => {
                 type={showPassword ? 'text' : 'password'}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className='w-full px-4 py-2 md:py-3 pr-11 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base'
+                className='w-full px-4 py-2 md:py-3 pr-11 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base'
                 required
               />
               {/* 👁 Show / Hide toggle */}
@@ -100,7 +100,7 @@ const Login = () => {
           <button
             type='submit'
             disabled={loading}
-            className='w-full bg-blue-600 text-white py-2 md:py-3 rounded hover:bg-blue-700 disabled:bg-gray-400 transition text-sm md:text-base font-semibold'
+            className='w-full bg-black text-white py-2 md:py-3 rounded-xl hover:bg-[#fb7241] disabled:bg-gray-400 transition text-sm md:text-base font-semibold'
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -108,7 +108,7 @@ const Login = () => {
 
         <p className='mt-4 text-center text-sm md:text-base'>
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-black hover:text-[#fb7241]">
             Sign up
           </Link>
         </p>

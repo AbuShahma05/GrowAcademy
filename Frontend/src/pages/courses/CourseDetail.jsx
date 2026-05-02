@@ -111,7 +111,7 @@ const CourseDetail = () => {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 md:py-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-12">
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* Left Side - Course Info */}
             <div>
@@ -125,10 +125,10 @@ const CourseDetail = () => {
               </button>
 
               <div className="flex items-center gap-2 mb-3 md:mb-4 flex-wrap">
-                <span className="bg-white text-blue-600 px-3 py-1 rounded text-xs md:text-sm font-semibold">
+                <span className="bg-black text-white px-3 py-1 rounded-lg text-xs md:text-sm font-semibold">
                   {course.category}
                 </span>
-                <span className="bg-white bg-opacity-20 px-3 py-1 rounded text-xs md:text-sm">
+                <span className="bg-black bg-opacity-20 px-3 py-1 rounded-lg text-xs md:text-sm">
                   {course.courseLevel}
                 </span>
               </div>
@@ -138,7 +138,7 @@ const CourseDetail = () => {
               </h1>
               <p className="text-base md:text-xl mb-4 md:mb-6">{course.subTitle}</p>
 
-              <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-6 flex-wrap text-sm md:text-base">
+              <div className="flex items-center gap-4 md:gap-6 md:mb-6 flex-wrap text-sm md:text-base">
                 <div className="flex items-center gap-2">
                   <StarIcon className="w-4 h-4 md:w-5 md:h-5" />
                   <span>{course.averageRating.toFixed(1)} ({course.totalRatings} ratings)</span>
@@ -153,7 +153,7 @@ const CourseDetail = () => {
                 <img
                   src={course.creator?.photoUrl || 'https://via.placeholder.com/50'}
                   alt={course.creator?.username}
-                  className="w-10 h-10 md:w-12 md:h-12 rounded-full"
+                  className="w-5 h-5 md:w-12 md:h-12 rounded-full"
                 />
                 <div>
                   <p className="text-xs md:text-sm">Created by</p>

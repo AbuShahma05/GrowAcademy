@@ -136,7 +136,7 @@ const EditCourse = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+        <div className="min-h-screen bg-neutral-200 py-4 sm:py-6 md:py-8">
             <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-4xl">
                 {/* Header - Responsive */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
@@ -144,13 +144,13 @@ const EditCourse = () => {
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
                         <button
                             onClick={handleTogglePublish}
-                            className="px-4 sm:px-6 py-2 bg-green-600 text-white rounded-lg text-sm sm:text-base hover:bg-green-700 transition"
+                            className="px-4 sm:px-6 py-2 bg-black text-white rounded-xl text-sm sm:text-base hover:bg-green-500 transition"
                         >
                             {formData.isPublished ? 'Unpublish' : 'Publish'}
                         </button>
                         <button
                             onClick={handleDelete}
-                            className="px-4 sm:px-6 py-2 bg-red-600 text-white rounded-lg text-sm sm:text-base hover:bg-red-700 transition"
+                            className="px-4 sm:px-6 py-2 bg-red-500 text-white rounded-xl text-sm sm:text-base hover:bg-red-900 transition"
                         >
                             Delete Course
                         </button>
@@ -166,7 +166,7 @@ const EditCourse = () => {
                             name="courseTitle"
                             value={formData.courseTitle}
                             onChange={handleChange}
-                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                             placeholder="e.g., Complete Web Development Bootcamp"
                             required
                             maxLength={100}
@@ -181,7 +181,7 @@ const EditCourse = () => {
                             name="subTitle"
                             value={formData.subTitle}
                             onChange={handleChange}
-                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                             placeholder="A brief description"
                             maxLength={120}
                         />
@@ -195,7 +195,7 @@ const EditCourse = () => {
                             value={formData.description}
                             onChange={handleChange}
                             rows={6}
-                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                             placeholder="Detailed course description..."
                             required
                             maxLength={2000}
@@ -210,7 +210,7 @@ const EditCourse = () => {
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 required
                             >
                                 {categories.map(cat => (
@@ -225,7 +225,7 @@ const EditCourse = () => {
                                 name="courseLevel"
                                 value={formData.courseLevel}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 required
                             >
                                 <option value="Beginner">Beginner</option>
@@ -244,7 +244,7 @@ const EditCourse = () => {
                                 name="language"
                                 value={formData.language}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 placeholder="e.g., Hinglish, English"
                                 required
                             />
@@ -257,7 +257,7 @@ const EditCourse = () => {
                                 name="subCategory"
                                 value={formData.subCategory}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 placeholder="e.g., Web Development"
                             />
                         </div>
@@ -272,7 +272,7 @@ const EditCourse = () => {
                                 name="coursePrice"
                                 value={formData.coursePrice}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 placeholder="499"
                                 required
                                 min="0"
@@ -286,7 +286,7 @@ const EditCourse = () => {
                                 name="originalPrice"
                                 value={formData.originalPrice}
                                 onChange={handleChange}
-                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
                                 placeholder="999"
                                 min="0"
                             />
@@ -296,7 +296,7 @@ const EditCourse = () => {
                     {/* Thumbnail - Responsive */}
                     <div>
                         <label className="block font-semibold mb-2 text-sm sm:text-base">Course Thumbnail</label>
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center">
+                        <div className="border-2 border-dashed border-gray-600 rounded-lg p-4 sm:p-6 text-center">
                             {formData.courseThumbnail ? (
                                 <div className="relative">
                                     <img
@@ -328,7 +328,7 @@ const EditCourse = () => {
                                     />
                                     <label
                                         htmlFor="thumbnail-upload"
-                                        className="inline-block mt-3 sm:mt-4 bg-blue-600 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base cursor-pointer hover:bg-blue-700"
+                                        className="inline-block mt-3 sm:mt-4 bg-black text-white px-4 sm:px-6 py-2 rounded-xl text-sm sm:text-base cursor-pointer hover:bg-[#fb7241]"
                                     >
                                         Choose File
                                     </label>
@@ -342,7 +342,7 @@ const EditCourse = () => {
                         <button
                             type="submit"
                             disabled={saving}
-                            className="flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-blue-700 disabled:bg-gray-400 transition"
+                            className="flex-1 bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-[#fb7241] disabled:bg-gray-400 transition"
                         >
                             {saving ? 'Saving Changes...' : 'Save Changes'}
                         </button>

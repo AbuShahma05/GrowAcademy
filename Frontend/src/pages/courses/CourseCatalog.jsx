@@ -51,8 +51,8 @@ const CourseCatalog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 md:py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-neutral-200 py-6 md:py-12">
+      <div className="container mx-auto px-12">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8">
           Explore Courses
         </h1>
@@ -68,7 +68,7 @@ const CourseCatalog = () => {
                 placeholder="Search courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                className="w-full pl-10 pr-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
               />
             </div>
 
@@ -76,7 +76,7 @@ const CourseCatalog = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -88,7 +88,7 @@ const CourseCatalog = () => {
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
             >
               <option value="">All Levels</option>
               {levels.map((level) => (
@@ -123,7 +123,7 @@ const CourseCatalog = () => {
                 />
                 <div className="p-4 md:p-6">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">
+                    <span className="text-xs bg-blue-100 text-black px-2 py-1 rounded">
                       {course.category}
                     </span>
                     <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">

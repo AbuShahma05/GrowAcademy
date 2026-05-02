@@ -180,21 +180,19 @@ const ManageLectures = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+    <div className="min-h-screen bg-neutral-200 py-4 sm:py-6 md:py-8">
       <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-6xl">
         {/* Header - Responsive */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="flex items-start sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <button
               onClick={() => navigate('/teacher/dashboard')}
-              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 flex-shrink-0"
+              className="flex items-center gap-2 text-gray-600 hover:text-[#fb7241] flex-shrink-0"
             >
               <ArrowLeftIcon className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">Back</span>
             </button>
             <div className="flex-1 min-w-0">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Manage Lectures</h1>
-              <p className="text-xs sm:text-sm md:text-base text-gray-600 truncate">{course?.courseTitle}</p>
             </div>
           </div>
           <button
@@ -202,7 +200,7 @@ const ManageLectures = () => {
               resetForm();
               setShowModal(true);
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition text-sm md:text-base whitespace-nowrap"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-black text-white px-4 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-xl hover:bg-[#fb7241] transition text-sm md:text-base whitespace-nowrap"
           >
             <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             Add Lecture
@@ -211,17 +209,17 @@ const ManageLectures = () => {
 
         {/* Lectures List - Responsive */}
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-5 md:p-6">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-5 md:mb-6">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-5 md:mb-6 text-center pt-8">
             Course Lectures ({lectures.length})
           </h2>
 
           {lectures.length === 0 ? (
             <div className="text-center py-8 sm:py-10 md:py-12">
-              <PlayIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-gray-300 mx-auto mb-3 sm:mb-4" />
+              <PlayIcon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-gray-600 mx-auto mb-3 sm:mb-4" />
               <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">No lectures added yet</p>
               <button
                 onClick={() => setShowModal(true)}
-                className="bg-blue-600 text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-lg hover:bg-blue-700 transition text-sm md:text-base"
+                className="bg-black text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 rounded-xl hover:bg-[#fb7241] transition text-sm md:text-base"
               >
                 Add Your First Lecture
               </button>
@@ -239,7 +237,7 @@ const ManageLectures = () => {
                       <span className="text-base sm:text-lg md:text-2xl font-bold text-gray-400 flex-shrink-0">
                         {index + 1}
                       </span>
-                      <PlayIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-blue-600 flex-shrink-0" />
+                      <PlayIcon className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-black flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-sm sm:text-base break-words">
                           {lecture.lectureTitle}
@@ -252,7 +250,7 @@ const ManageLectures = () => {
                             </span>
                           )}
                           {lecture.videoUrl && (
-                            <span className="text-blue-600 text-xs sm:text-sm">✓ Video uploaded</span>
+                            <span className="text-black text-xs sm:text-sm">✓ Video uploaded</span>
                           )}
                         </div>
                       </div>
@@ -261,14 +259,14 @@ const ManageLectures = () => {
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <button
                         onClick={() => handleEdit(lecture)}
-                        className="flex-1 sm:flex-none p-2 text-blue-600 hover:bg-blue-50 rounded transition"
+                        className="flex-1 sm:flex-none p-2 text-black hover:bg-[#fb7241] rounded transition"
                         title="Edit"
                       >
                         <PencilIcon className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDelete(lecture._id)}
-                        className="flex-1 sm:flex-none p-2 text-red-600 hover:bg-red-50 rounded transition"
+                        className="flex-1 sm:flex-none p-2 text-red-500 hover:bg-red-900 rounded transition"
                         title="Delete"
                       >
                         <TrashIcon className="w-5 h-5" />
@@ -310,7 +308,7 @@ const ManageLectures = () => {
                       type="text"
                       value={formData.lectureTitle}
                       onChange={(e) => setFormData({ ...formData, lectureTitle: e.target.value })}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                       placeholder="e.g., Introduction to React Hooks"
                       required
                     />
@@ -321,10 +319,10 @@ const ManageLectures = () => {
                     <label className="block font-semibold mb-2 text-sm md:text-base">
                       Upload Video
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-5 md:p-6 text-center">
+                    <div className="border-2 border-dashed border-gray-500 rounded-lg p-4 sm:p-5 md:p-6 text-center">
                       {videoFile ? (
                         <div>
-                          <p className="text-green-600 mb-2 text-sm md:text-base break-all">✓ {videoFile.name}</p>
+                          <p className="text-green-500 mb-2 text-sm md:text-base break-all">✓ {videoFile.name}</p>
                           <p className="text-xs sm:text-sm text-gray-600 mb-2">
                             Size: {(videoFile.size / 1024 / 1024).toFixed(2)} MB
                           </p>
@@ -354,7 +352,7 @@ const ManageLectures = () => {
                           />
                           <label
                             htmlFor="video-upload"
-                            className="inline-block bg-blue-600 text-white px-4 sm:px-5 md:px-6 py-2 rounded cursor-pointer hover:bg-blue-700 text-sm md:text-base"
+                            className="inline-block bg-black text-white px-4 sm:px-5 md:px-6 py-2 rounded-xl cursor-pointer hover:bg-[#fb7241] text-sm md:text-base"
                           >
                             Choose Video
                           </label>
@@ -398,7 +396,7 @@ const ManageLectures = () => {
                         type="number"
                         value={formData.duration}
                         onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
-                        className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                         min="0"
                       />
                     </div>
@@ -409,7 +407,7 @@ const ManageLectures = () => {
                         type="number"
                         value={formData.order}
                         onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
-                        className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm md:text-base"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-2.5 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
                         min="1"
                         required
                       />
@@ -435,7 +433,7 @@ const ManageLectures = () => {
                     <button
                       type="submit"
                       disabled={uploading}
-                      className="flex-1 bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition text-sm md:text-base"
+                      className="flex-1 bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#fb7241] disabled:bg-gray-400 transition text-sm md:text-base"
                     >
                       {uploading
                         ? `Uploading ${uploadProgress}%...`
