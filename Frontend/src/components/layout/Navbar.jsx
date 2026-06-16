@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { MdArrowOutward } from "react-icons/md";
 import {
   UserCircleIcon,
   Cog6ToothIcon,
@@ -14,26 +15,39 @@ const Navbar = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   return (
-    <nav className="bg-[#f7eae7]  sticky top-0 z-50">
-      <div className="container mx-auto px-16 py-3 md:py-4">
+    <nav className="bg-white text-black sticky top-0 z-50 shadow-md">
+      <div className="container mx-auto px-4 md:px-8 lg:px-16 py-3 md:py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="text-xl md:text-2xl font-bold">
-            <span className="text-[#fb7241]">Grow</span>
+            <span className="text-[#7c3aed]">Grow</span>
             <span className="text-black">Academy</span>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/courses" className="hover:text-[#fb7241] transition ">
+          <div className="hidden md:flex items-center gap-12">
+            <Link to="/" className=" bg-black text-white px-6 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
+              Home
+            </Link>
+
+            <Link to="/courses" className="hover:text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
               Courses
+            </Link>
+
+            <Link to="/" className="hover:text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
+              About Us
+            </Link>
+
+            <Link to="/" className="flex items-center gap-1 underline underline-offset-8 px-4 py-1 rounded-full hover:bg-[#7c3aed] hover:text-white transition-all duration-300">
+              Contact Us
+              <MdArrowOutward />
             </Link>
 
             {isAuthenticated ? (
               <>
                 <Link
                   to={`/${user.role.toLowerCase()}/dashboard`}
-                  className="hover:text-[#fb7241] transition font-bold"
+                  className="font-bold px-4 py-1 rounded-full hover:bg-[#7c3aed] hover:text-white transition"
                 >
                   Dashboard
                 </Link>
@@ -42,7 +56,7 @@ const Navbar = () => {
                 <div className="relative">
                   <button
                     onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                    className="flex items-center gap-2 hover:text-[#fb7241]"
+                    className="flex items-center gap-2 hover:text-[#7c3aed]"
                   >
                     <img
                       src={user.photoUrl || 'https://via.placeholder.com/40'}
@@ -62,6 +76,7 @@ const Navbar = () => {
                         <UserCircleIcon className="w-5 h-5" />
                         My Profile
                       </Link>
+
                       <Link
                         to="/profile"
                         onClick={() => setProfileDropdownOpen(false)}
@@ -70,6 +85,7 @@ const Navbar = () => {
                         <Cog6ToothIcon className="w-5 h-5" />
                         Settings
                       </Link>
+
                       <button
                         onClick={() => {
                           setProfileDropdownOpen(false);
@@ -85,12 +101,13 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className="hover:text-[#fb7241] transition">
+                <Link to="/login" className="hover:text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
                   Login
                 </Link>
+
                 <Link
                   to="/register"
-                  className="bg-black text-white px-4 py-2 rounded-xl hover:bg-[#fb7241] transition"
+                  className="bg-black text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition"
                 >
                   Sign Up
                 </Link>
@@ -116,9 +133,33 @@ const Navbar = () => {
           <div className="md:hidden mt-4 pb-4 border-t pt-4">
             <div className="flex flex-col gap-4">
               <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-full hover:bg-[#7c3aed] hover:text-white transition text-center"
+              >
+                Home
+              </Link>
+
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-[#7c3aed] transition"
+              >
+                About Us
+              </Link>
+
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-[#7c3aed] transition"
+              >
+                Contact Us
+              </Link>
+
+              <Link
                 to="/courses"
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#fb7241] transition"
+                className="hover:text-[#7c3aed] transition"
               >
                 Courses
               </Link>
@@ -128,7 +169,7 @@ const Navbar = () => {
                   <Link
                     to={`/${user.role.toLowerCase()}/dashboard`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="hover:text-[#fb7241] transition border-2"
+                    className="hover:text-[#7c3aed] transition"
                   >
                     Dashboard
                   </Link>
@@ -150,7 +191,7 @@ const Navbar = () => {
                     <Link
                       to="/profile"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-2 py-2 hover:text-[#fb7241]"
+                      className="flex items-center gap-2 py-2 hover:text-[#7c3aed]"
                     >
                       <UserCircleIcon className="w-5 h-5" />
                       My Profile
@@ -172,14 +213,15 @@ const Navbar = () => {
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="hover:text-blue-600 transition"
+                    className="hover:text-white px-6 py-1 rounded-full hover:bg-[#7c3aed] transition text-center"
                   >
                     Login
                   </Link>
+
                   <Link
                     to="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-[#fb7241] transition text-center"
+                    className="bg-black text-white px-4 py-2 rounded-xl hover:bg-[#7c3aed] transition text-center"
                   >
                     Sign Up
                   </Link>
