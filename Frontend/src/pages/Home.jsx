@@ -49,7 +49,7 @@ const Home = () => {
         <div className="relative z-10 container mx-auto px-6 md:px-12 grid md:grid-cols-2 items-center gap-12">
 
           {/* ── LEFT TEXT ── */}
-          <div>
+          <div className='mx-4'>
 
             {/* Badge */}
             <p className="inline-flex items-center text-[#7c3aed] text-xs font-semibold tracking-widest border border-[#7c3aed] rounded-full px-4 py-1 mb-8">
@@ -95,7 +95,7 @@ const Home = () => {
                 </Link>
                 <Link
                   to="/courses"
-                  className="bg-transparent border-2 border-gray-300 text-black px-8 py-3 rounded-xl font-semibold hover:border-[#7c3aed] hover:bg-gradient-to-r from-[#7c3aed] transition text-center"
+                  className="bg-transparent border-2 border-gray-300 text-black px-8 py-3 rounded-xl font-semibold hover:border-[#7c3aed] hover:bg-gradient-to-r hover:from-[#7c3aed] hover:to-[#a855f7] hover:text-white transition text-center"
                 >
                   Browse Courses
                 </Link>
@@ -127,21 +127,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── TRUSTED BY ─── */}
-      <section className="py-8 bg-white border-t border-b border-gray-100">
-        <div className="container mx-auto px-6">
-          <p className="text-center text-xs font-semibold tracking-widest text-gray-400 mb-6 uppercase">
-            Trusted By
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-40 grayscale">
-            {["Contentful", "Webflow", "Airtable", "Atlassian", "Freshworks"].map((brand) => (
-              <span key={brand} className="text-gray-600 font-bold text-sm md:text-base tracking-wide">
-                {brand}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* ─── FEATURES SECTION ─── */}
       <section className="relative py-16 md:py-24 bg-white overflow-hidden">
@@ -156,7 +142,7 @@ const Home = () => {
             Services
           </p>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 text-black">
             Team potential with{" "}
             <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
               AI learning.
@@ -166,14 +152,14 @@ const Home = () => {
             Everything you need to build skills, track growth, and earn recognition.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="group bg-white border border-gray-100 p-6 rounded-2xl shadow-sm hover:shadow-xl hover:border-purple-200 transition-all duration-300 cursor-pointer"
+                className="group bg-white border border-gray-500 mx-4 p-6 rounded-2xl shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 cursor-pointer"
               >
                 {/* Number label like reference design */}
-                <p className="text-4xl font-bold text-gray-100 mb-2 group-hover:text-purple-100 transition">
+                <p className="text-4xl font-bold text-black mb-2 group-hover:text-purple-900 transition">
                   0{index + 1}
                 </p>
                 <div className="mb-4">
@@ -191,7 +177,7 @@ const Home = () => {
       </section>
 
       {/* ─── STATS SECTION ─── */}
-      <section className="py-16 md:py-20 bg-gray-50">
+      <section className="py-16 md:py-20 bg-gray-50 mx-4">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             {[
@@ -199,11 +185,11 @@ const Home = () => {
               { number: "500+", label: "Expert Instructors" },
               { number: "1,000+", label: "Quality Courses" },
             ].map((stat, i) => (
-              <div key={i} className="p-8 bg-white rounded-2xl shadow-sm border border-gray-100">
-                <h3 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent mb-2">
+              <div key={i} className="p-8 bg-white rounded-2xl border text-gray-900 hover:text-[#7c3aed] border-gray-700 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 cursor-pointer">
+                <h3 className="text-4xl md:text-5xl font-bold bg-clip-text  mb-2">
                   {stat.number}
                 </h3>
-                <p className="text-gray-500 text-base">{stat.label}</p>
+                <p className="text-gray-700 text-base">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -211,21 +197,21 @@ const Home = () => {
       </section>
 
       {/* ─── CTA SECTION ─── */}
-      <section className="relative py-16 md:py-24 overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden mx-4 sm:mx-6 md:mx-10 lg:mx-16 rounded-2xl">
 
         {/* Full gradient background like reference */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#7c3aed] to-[#a855f7] z-0" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1f0154] to-[#d9cbe7] z-0" />
 
         {/* Decorative blobs inside CTA */}
-        <div className="absolute -top-10 -left-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl z-0" />
-        <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl z-0" />
+        <div className="absolute -top-10 -left-10 w-32 h-32  md:w-64 md:h-64 bg-white opacity-10 rounded-full blur-2xl md:blur-3xl" />
+        <div className="absolute -bottom-10 -right-10 w-32 h-32 md:w-64 md:h-64 bg-white opacity-10 rounded-full blur-2xl md:blur-3xl z-0" />
 
         <div className="relative z-10 container mx-auto px-6 text-center">
           <p className="text-purple-200 text-xs font-semibold tracking-widest uppercase mb-4">
             Join Us Today
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 max-w-2xl mx-auto">
-            Boost your team's skills with AI-driven training.
+            Boost your skills with AI-driven training.
           </h2>
           <p className="text-purple-200 text-base md:text-lg mb-10 max-w-xl mx-auto">
             Join thousands of students already learning on GrowAcademy.
