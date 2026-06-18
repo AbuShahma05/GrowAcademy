@@ -191,9 +191,8 @@ const Register = () => {
                       {[1, 2, 3, 4, 5].map((seg) => (
                         <div
                           key={seg}
-                          className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                            seg <= strength.score ? strength.color : 'bg-gray-200'
-                          }`}
+                          className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${seg <= strength.score ? strength.color : 'bg-gray-200'
+                            }`}
                         />
                       ))}
                     </div>
@@ -270,11 +269,10 @@ const Register = () => {
                     key={value}
                     type="button"
                     onClick={() => setFormData({ ...formData, role: value })}
-                    className={`flex flex-col items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all duration-200 text-center relative ${
-                      formData.role === value
+                    className={`flex flex-col items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all duration-200 text-center relative ${formData.role === value
                         ? 'border-[#7c3aed] bg-purple-50 text-[#7c3aed]'
                         : 'border-gray-200 text-gray-600 hover:border-purple-300'
-                    }`}
+                      }`}
                   >
                     {/* Selected check mark */}
                     {formData.role === value && (
@@ -286,9 +284,8 @@ const Register = () => {
                     )}
 
                     {/* Icon circle */}
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition ${
-                      formData.role === value ? 'bg-purple-100' : 'bg-gray-100'
-                    }`}>
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition ${formData.role === value ? 'bg-purple-100' : 'bg-gray-100'
+                      }`}>
                       <Icon className="w-5 h-5" />
                     </div>
 

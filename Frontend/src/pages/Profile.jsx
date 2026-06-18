@@ -9,6 +9,37 @@ import {
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
+// ── Eye icons ─────────────────────────────────────────────────────────
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+const EyeOffIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
+);
+
+// ── Shared input class ────────────────────────────────────────────────
+const inputCls =
+  'w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-[#7c3aed] text-sm transition bg-white';
+
+// ── Field wrapper ─────────────────────────────────────────────────────
+const Field = ({ label, children, hint }) => (
+  <div>
+    <label className="block mb-1.5 font-semibold text-sm text-gray-800">{label}</label>
+    {children}
+    {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+  </div>
+);
+
+// ─────────────────────────────────────────────────────────────────────
 const Profile = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
@@ -35,6 +66,9 @@ const Profile = () => {
     newPassword: '',
     confirmPassword: ''
   });
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -90,18 +124,14 @@ const Profile = () => {
       }
 
       const { data } = await API.put('/user/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       if (data.success) {
         const currentUser = JSON.parse(localStorage.getItem('user'));
         const updatedUser = { ...currentUser, ...data.user };
         localStorage.setItem('user', JSON.stringify(updatedUser));
-
         showMessage('success', 'Profile updated successfully!');
-
         setTimeout(() => window.location.reload(), 1500);
       }
     } catch (error) {
@@ -136,11 +166,7 @@ const Profile = () => {
 
       if (data.success) {
         showMessage('success', 'Password changed successfully!');
-        setPasswordData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
-        });
+        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       }
     } catch (error) {
       showMessage('error', error.response?.data?.message || 'Failed to change password');
@@ -189,270 +215,302 @@ const Profile = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-neutral-200 py-4 sm:py-6 md:py-8">
-      <div className="container mx-auto px-3 sm:px-4 md:px-6 max-w-4xl">
-        {/* Header - Responsive */}
-        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            <div className="relative flex-shrink-0">
-              <img
-                src={photoPreview || 'https://via.placeholder.com/100'}
-                alt={user?.username}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-3 border-[#fb7241]"
-              />
-              {activeTab === 'profile' && (
-                <label
-                  htmlFor="photo-upload"
-                  className="absolute bottom-0 right-0 bg-black text-white p-1.5 sm:p-2 rounded-full cursor-pointer hover:bg-[#fb7241] transition"
-                >
-                  <CameraIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <input
-                    id="photo-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-            <div className="text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold break-words">{user?.username}</h1>
-              <p className="text-sm sm:text-base text-gray-600 break-all">{user?.email}</p>
-              <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${user?.role === 'Admin' ? 'bg-red-100 text-red-700' :
-                user?.role === 'Teacher' ? 'bg-blue-100 text-black' :
-                  'bg-green-100 text-[#fb7241]'
-                }`}>
-                {user?.role}
-              </span>
-            </div>
-          </div>
-        </div>
+  const roleBadge = {
+    Admin: 'bg-purple-100 text-purple-700',
+    Teacher: 'bg-blue-100 text-blue-700',
+    Student: 'bg-green-100 text-green-700',
+  };
 
-        {/* Message Alert - Responsive */}
+  const tabs = [
+    { key: 'profile', label: 'Profile', Icon: UserCircleIcon },
+    { key: 'password', label: 'Password', Icon: KeyIcon },
+    { key: 'settings', label: 'Settings', Icon: TrashIcon },
+  ];
+
+  return (
+    <div className="min-h-screen bg-white py-6 md:py-10 px-4 text-black">
+      <div className="max-w-2xl mx-auto">
+
+        {/* ── Page title ── */}
+        <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-2 text-center">
+          Account
+        </p>
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-black mb-8">
+          Your{' '}
+          <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+            profile
+          </span>
+        </h1>
+
+        {/* ── Alert banner ── */}
         {message.text && (
-          <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg text-sm sm:text-base ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+          <div className={`mb-6 px-4 py-3 rounded-xl text-sm flex items-start gap-2 ${message.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-700'
+              : 'bg-red-50 border border-red-200 text-red-600'
             }`}>
+            <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              {message.type === 'success'
+                ? <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                : <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-5.25a.75.75 0 001.5 0v-3.5a.75.75 0 00-1.5 0v3.5zm.75-6a.75.75 0 100 1.5.75.75 0 000-1.5z" clipRule="evenodd" />
+              }
+            </svg>
             {message.text}
           </div>
         )}
 
-        {/* Tabs - Responsive */}
-        <div className="bg-white rounded-lg shadow-md mb-4 sm:mb-6">
-          <div className="flex border-b overflow-x-auto">
-            <button
-              onClick={() => setActiveTab('profile')}
-              className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'profile'
-                ? 'border-b-2 border-[#fb7241] text-black'
-                : 'text-gray-600 hover:text-[#fb7241]'
-                }`}
-            >
-              <UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
-              <span className="hidden xs:inline">Profile</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('password')}
-              className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'password'
-                ? 'border-b-2 border-[#fb7241] text-black'
-                : 'text-gray-600 hover:text-[#fb7241]'
-                }`}
-            >
-              <KeyIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
-              <span className="hidden xs:inline">Password</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('settings')}
-              className={`flex-1 py-3 sm:py-4 px-3 sm:px-6 font-semibold text-sm sm:text-base whitespace-nowrap ${activeTab === 'settings'
-                ? 'border-b-2 border-[#fb7241] text-black'
-                : 'text-gray-600 hover:text-[#fb7241]'
-                }`}
-            >
-              <TrashIcon className="w-4 h-4 sm:w-5 sm:h-5 inline mr-1 sm:mr-2" />
-              <span className="hidden xs:inline">Settings</span>
-            </button>
+        {/* ── Profile header card ── */}
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="relative flex-shrink-0">
+            <img
+              src={photoPreview || 'https://via.placeholder.com/100'}
+              alt={user?.username}
+              className="w-20 h-20 rounded-full object-cover ring-2 ring-[#7c3aed] ring-offset-2"
+            />
+            {activeTab === 'profile' && (
+              <label
+                htmlFor="photo-upload"
+                className="absolute bottom-0 right-0 bg-[#7c3aed] text-white p-1.5 rounded-full cursor-pointer hover:bg-[#a855f7] transition shadow"
+              >
+                <CameraIcon className="w-4 h-4" />
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+          <div className="text-center sm:text-left">
+            <h2 className="text-xl font-bold text-black">{user?.username}</h2>
+            <p className="text-sm text-gray-500 mt-0.5">{user?.email}</p>
+            <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${roleBadge[user?.role] || 'bg-gray-100 text-gray-600'}`}>
+              {user?.role}
+            </span>
           </div>
         </div>
 
-        {/* Tab Content - Responsive */}
-        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-          {/* Profile Tab */}
-          {activeTab === 'profile' && (
-            <form onSubmit={handleProfileUpdate} className="space-y-4 sm:space-y-6">
-              <div>
-                <label className="block font-semibold mb-2 text-sm sm:text-base">Username</label>
-                <input
-                  type="text"
-                  value={profileData.username}
-                  onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  required
-                  minLength={3}
-                  maxLength={25}
-                />
-              </div>
+        {/* ── Main card ── */}
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl hover:border-purple-400 transition-all duration-300 overflow-hidden">
 
-              <div>
-                <label className="block font-semibold mb-2 text-sm sm:text-base">Bio</label>
-                <textarea
-                  value={profileData.bio}
-                  onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
-                  rows={4}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  placeholder="Tell us about yourself..."
-                  maxLength={500}
-                />
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                  {profileData.bio.length}/500 characters
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Social Links (Optional)</h3>
-                <div className="space-y-3 sm:space-y-4">
-                  <input
-                    type="url"
-                    placeholder="Website URL"
-                    value={profileData.socialLinks.website}
-                    onChange={(e) => setProfileData({
-                      ...profileData,
-                      socialLinks: { ...profileData.socialLinks, website: e.target.value }
-                    })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  />
-                  <input
-                    type="url"
-                    placeholder="LinkedIn Profile URL"
-                    value={profileData.socialLinks.linkedin}
-                    onChange={(e) => setProfileData({
-                      ...profileData,
-                      socialLinks: { ...profileData.socialLinks, linkedin: e.target.value }
-                    })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  />
-                  <input
-                    type="url"
-                    placeholder="Twitter Profile URL"
-                    value={profileData.socialLinks.twitter}
-                    onChange={(e) => setProfileData({
-                      ...profileData,
-                      socialLinks: { ...profileData.socialLinks, twitter: e.target.value }
-                    })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  />
-                  <input
-                    type="url"
-                    placeholder="YouTube Channel URL"
-                    value={profileData.socialLinks.youtube}
-                    onChange={(e) => setProfileData({
-                      ...profileData,
-                      socialLinks: { ...profileData.socialLinks, youtube: e.target.value }
-                    })}
-                    className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  />
-                </div>
-              </div>
-
+          {/* Tabs */}
+          <div className="flex border-b border-gray-100">
+            {tabs.map(({ key, label, Icon }) => (
               <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-[#fb7241] disabled:bg-gray-400 transition"
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition ${activeTab === key
+                    ? 'border-b-2 border-[#7c3aed] text-[#7c3aed] bg-purple-50'
+                    : 'text-gray-500 hover:text-[#7c3aed] hover:bg-gray-50'
+                  }`}
               >
-                {loading ? 'Saving...' : 'Save Changes'}
+                <Icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{label}</span>
               </button>
-            </form>
-          )}
+            ))}
+          </div>
 
-          {/* Password Tab */}
-          {activeTab === 'password' && (
-            <form onSubmit={handlePasswordChange} className="space-y-4 sm:space-y-6">
-              <div>
-                <label className="block font-semibold mb-2 text-sm sm:text-base">Current Password</label>
-                <input
-                  type="password"
-                  value={passwordData.currentPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  required
-                />
-              </div>
+          {/* Tab content */}
+          <div className="p-6">
 
-              <div>
-                <label className="block font-semibold mb-2 text-sm sm:text-base">New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.newPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  required
-                  minLength={8}
-                />
-                <p className="text-xs sm:text-sm text-gray-500 mt-1">Minimum 8 characters</p>
-              </div>
+            {/* ── Profile Tab ── */}
+            {activeTab === 'profile' && (
+              <form onSubmit={handleProfileUpdate} className="space-y-5">
+                <Field label="Username">
+                  <input
+                    type="text"
+                    value={profileData.username}
+                    onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
+                    className={inputCls}
+                    required
+                    minLength={3}
+                    maxLength={25}
+                    placeholder="Your username"
+                  />
+                </Field>
 
-              <div>
-                <label className="block font-semibold mb-2 text-sm sm:text-base">Confirm New Password</label>
-                <input
-                  type="password"
-                  value={passwordData.confirmPassword}
-                  onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                  className="w-full px-3 sm:px-4 py-2 border rounded text-sm sm:text-base focus:outline-none focus:ring-1 focus:ring-black"
-                  required
-                />
-              </div>
+                <Field label="Bio" hint={`${profileData.bio.length}/500 characters`}>
+                  <textarea
+                    value={profileData.bio}
+                    onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
+                    rows={4}
+                    className={`${inputCls} resize-none`}
+                    placeholder="Tell us about yourself..."
+                    maxLength={500}
+                  />
+                </Field>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-black text-white py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base hover:bg-[#fb7241] disabled:bg-gray-400 transition"
-              >
-                {loading ? 'Changing Password...' : 'Change Password'}
-              </button>
-            </form>
-          )}
-
-          {/* Settings Tab */}
-          {activeTab === 'settings' && (
-            <div className="space-y-4 sm:space-y-6">
-              <div className="border-l-4 border-yellow-500 bg-yellow-50 p-3 sm:p-4">
-                <h3 className="font-semibold text-yellow-800 mb-2 text-sm sm:text-base">Deactivate Account</h3>
-                <p className="text-xs sm:text-sm text-yellow-700 mb-3 sm:mb-4">
-                  Temporarily disable your account. You can reactivate it by logging in again.
-                </p>
-                <button
-                  onClick={handleDeactivateAccount}
-                  className="bg-yellow-600 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base hover:bg-yellow-700 transition w-full sm:w-auto"
-                >
-                  Deactivate Account
-                </button>
-              </div>
-
-              <div className="border-l-4 border-red-500 bg-red-50 p-3 sm:p-4">
-                <h3 className="font-semibold text-red-800 mb-2 text-sm sm:text-base">Delete Account</h3>
-                <p className="text-xs sm:text-sm text-red-700 mb-3 sm:mb-4">
-                  ⚠️ Permanently delete your account and all associated data. This action cannot be undone!
-                </p>
-                <button
-                  onClick={handleDeleteAccount}
-                  className="bg-red-600 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base hover:bg-red-700 transition w-full sm:w-auto"
-                >
-                  Delete Account Permanently
-                </button>
-              </div>
-
-              <div className="border-l-4 border-green-500 bg-green-50 p-3 sm:p-4">
-                <h3 className="font-semibold text-green-800 mb-2 text-sm sm:text-base flex items-center gap-2">
-                  <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  Account Information
-                </h3>
-                <div className="text-xs sm:text-sm text-green-700 space-y-2">
-                  <p className="break-words"><strong>Email Verified:</strong> {user?.isEmailVerified ? 'Yes ✓' : 'No ✗'}</p>
-                  <p className="break-words"><strong>Account Status:</strong> {user?.isActive ? 'Active' : 'Inactive'}</p>
-                  <p className="break-words"><strong>Member Since:</strong> {new Date(user?.createdAt).toLocaleDateString()}</p>
+                <div>
+                  <p className="font-semibold text-sm text-gray-800 mb-3">Social links <span className="text-gray-400 font-normal">(optional)</span></p>
+                  <div className="space-y-3">
+                    {[
+                      { key: 'website', placeholder: 'Website URL' },
+                      { key: 'linkedin', placeholder: 'LinkedIn profile URL' },
+                      { key: 'twitter', placeholder: 'Twitter profile URL' },
+                      { key: 'youtube', placeholder: 'YouTube channel URL' },
+                    ].map(({ key, placeholder }) => (
+                      <input
+                        key={key}
+                        type="url"
+                        placeholder={placeholder}
+                        value={profileData.socialLinks[key]}
+                        onChange={(e) => setProfileData({
+                          ...profileData,
+                          socialLinks: { ...profileData.socialLinks, [key]: e.target.value }
+                        })}
+                        className={inputCls}
+                      />
+                    ))}
+                  </div>
                 </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-all duration-300 shadow-md disabled:opacity-60"
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Saving…
+                    </span>
+                  ) : 'Save changes'}
+                </button>
+              </form>
+            )}
+
+            {/* ── Password Tab ── */}
+            {activeTab === 'password' && (
+              <form onSubmit={handlePasswordChange} className="space-y-5">
+                <Field label="Current password">
+                  <div className="relative">
+                    <input
+                      type={showCurrent ? 'text' : 'password'}
+                      value={passwordData.currentPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                      className={`${inputCls} pr-11`}
+                      required
+                      placeholder="Enter current password"
+                    />
+                    <button type="button" onClick={() => setShowCurrent(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7c3aed] transition">
+                      {showCurrent ? <EyeOffIcon /> : <EyeIcon />}
+                    </button>
+                  </div>
+                </Field>
+
+                <Field label="New password" hint="Minimum 8 characters">
+                  <div className="relative">
+                    <input
+                      type={showNew ? 'text' : 'password'}
+                      value={passwordData.newPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                      className={`${inputCls} pr-11`}
+                      required
+                      minLength={8}
+                      placeholder="Create a new password"
+                    />
+                    <button type="button" onClick={() => setShowNew(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7c3aed] transition">
+                      {showNew ? <EyeOffIcon /> : <EyeIcon />}
+                    </button>
+                  </div>
+                </Field>
+
+                <Field label="Confirm new password">
+                  <div className="relative">
+                    <input
+                      type={showConfirm ? 'text' : 'password'}
+                      value={passwordData.confirmPassword}
+                      onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                      className={`${inputCls} pr-11`}
+                      required
+                      placeholder="Re-enter new password"
+                    />
+                    <button type="button" onClick={() => setShowConfirm(v => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7c3aed] transition">
+                      {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
+                    </button>
+                  </div>
+                  {passwordData.confirmPassword.length > 0 && (
+                    <p className={`text-xs mt-1.5 font-medium ${passwordData.newPassword === passwordData.confirmPassword ? 'text-green-600' : 'text-red-500'
+                      }`}>
+                      {passwordData.newPassword === passwordData.confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
+                    </p>
+                  )}
+                </Field>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-all duration-300 shadow-md disabled:opacity-60"
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Changing password…
+                    </span>
+                  ) : 'Change password'}
+                </button>
+              </form>
+            )}
+
+            {/* ── Settings Tab ── */}
+            {activeTab === 'settings' && (
+              <div className="space-y-4">
+
+                {/* Account info */}
+                <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+                  <h3 className="font-semibold text-green-800 text-sm flex items-center gap-2 mb-3">
+                    <CheckCircleIcon className="w-4 h-4" />
+                    Account information
+                  </h3>
+                  <div className="space-y-1.5 text-sm text-green-700">
+                    <p><span className="font-medium">Email verified:</span> {user?.isEmailVerified ? 'Yes ✓' : 'No ✗'}</p>
+                    <p><span className="font-medium">Account status:</span> {user?.isActive ? 'Active' : 'Inactive'}</p>
+                    <p><span className="font-medium">Member since:</span> {new Date(user?.createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                {/* Deactivate */}
+                <div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4">
+                  <h3 className="font-semibold text-yellow-800 text-sm mb-1">Deactivate account</h3>
+                  <p className="text-xs text-yellow-700 mb-3">
+                    Temporarily disable your account. You can reactivate it by logging in again.
+                  </p>
+                  <button
+                    onClick={handleDeactivateAccount}
+                    className="bg-yellow-500 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-600 transition w-full sm:w-auto"
+                  >
+                    Deactivate account
+                  </button>
+                </div>
+
+                {/* Delete */}
+                <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                  <h3 className="font-semibold text-red-800 text-sm mb-1">Delete account</h3>
+                  <p className="text-xs text-red-700 mb-3">
+                    Permanently delete your account and all associated data. This action cannot be undone.
+                  </p>
+                  <button
+                    onClick={handleDeleteAccount}
+                    className="bg-red-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition w-full sm:w-auto"
+                  >
+                    Delete account permanently
+                  </button>
+                </div>
+
               </div>
-            </div>
-          )}
+            )}
+
+          </div>
         </div>
       </div>
     </div>
