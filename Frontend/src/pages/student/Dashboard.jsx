@@ -48,130 +48,171 @@ const StudentDashboard = () => {
 
   const statCards = [
     {
-      icon: <BookOpenIcon className="w-6 h-6 md:w-8 md:h-8" />,
-      title: "Enrolled Courses",
+      icon: <BookOpenIcon className="w-5 h-5 md:w-6 md:h-6" />,
+      title: 'Enrolled',
       value: stats.enrolledCourses,
-      color: "bg-blue-500"
+      accent: 'bg-blue-50 text-blue-600',
+      iconBg: 'bg-blue-100',
+      border: 'border-blue-100',
     },
     {
-      icon: <ChartBarIcon className="w-6 h-6 md:w-8 md:h-8" />,
-      title: "In Progress",
+      icon: <ChartBarIcon className="w-5 h-5 md:w-6 md:h-6" />,
+      title: 'In Progress ',
       value: stats.inProgressCourses,
-      color: "bg-yellow-500"
+      accent: 'bg-amber-900 text-amber-900',
+      iconBg: 'bg-amber-100',
+      border: 'border-amber-100',
     },
     {
-      icon: <AcademicCapIcon className="w-6 h-6 md:w-8 md:h-8" />,
-      title: "Completed",
+      icon: <AcademicCapIcon className="w-5 h-5 md:w-6 md:h-6" />,
+      title: 'Completed',
       value: stats.completedCourses,
-      color: "bg-green-500"
+      accent: 'bg-green-50 text-green-600',
+      iconBg: 'bg-green-100',
+      border: 'border-green-100',
     },
     {
-      icon: <ClockIcon className="w-6 h-6 md:w-8 md:h-8" />,
-      title: "Learning Time",
+      icon: <ClockIcon className="w-5 h-5 md:w-6 md:h-6" />,
+      title: 'Learning Time',
       value: `${Math.floor(stats.totalLearningTime / 60)}h`,
-      color: "bg-purple-500"
-    }
+      accent: 'bg-purple-50 text-purple-600',
+      iconBg: 'bg-purple-100',
+      border: 'border-purple-100',
+    },
   ];
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-gray-200 border-t-[#7c3aed]"></div>
+          <p className="text-sm text-gray-400">Loading your dashboard…</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 md:py-8">
-      <div className="container mx-auto px-4">
-        {/* Welcome Section */}
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2">
-            Welcome back, {user.username}! 👋
+    <div className="min-h-screen bg-white py-6 md:py-10 px-4">
+      <div className="max-w-5xl mx-auto">
+
+        {/* ── Welcome header ── */}
+        <div className="mb-8">
+          <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-2">
+            Dashboard
+          </p>
+          <h1 className="text-2xl md:text-3xl font-bold text-black">
+            Welcome back,{' '}
+            <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+              {user.username}
+            </span>{' '}
+            👋
           </h1>
-          <p className="text-sm md:text-base text-gray-600">Continue your learning journey</p>
+          <p className="text-sm text-gray-500 mt-1">Pick up where you left off and keep learning.</p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+        {/* ── Stat cards ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
           {statCards.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-4 md:p-6">
-              <div className={`${stat.color} w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center text-white mb-3 md:mb-4`}>
+            <div
+              key={index}
+              className={`bg-white rounded-2xl border ${stat.border} shadow-sm hover:shadow-md p-4 md:p-5 hover:border-purple-700 transition-all duration-300 cursor-pointer`}
+            >
+              <div className={`w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center mb-3 ${stat.iconBg} ${stat.accent.split(' ')[1]}`}>
                 {stat.icon}
               </div>
-              <h3 className="text-gray-600 text-xs md:text-sm mb-1">{stat.title}</h3>
-              <p className="text-xl md:text-3xl font-bold">{stat.value}</p>
+              <p className="text-xs text-black mb-0.5">{stat.title}</p>
+              <p className="text-2xl md:text-3xl font-bold text-black">{stat.value}</p>
             </div>
           ))}
         </div>
 
-        {/* Recent Courses */}
-        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <div className="flex items-center justify-between mb-4 md:mb-6">
-            <h2 className="text-xl md:text-2xl font-bold">Continue Learning</h2>
+        {/* ── Continue Learning ── */}
+        <div className="bg-white rounded-2xl border border-gray-300 shadow-sm hover:shadow-xl hover:border-purple-600 transition-all duration-300 overflow-hidden">
+          <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-gray-100">
+            <h2 className="text-base md:text-lg font-bold text-black">Continue learning</h2>
             <Link
               to="/student/my-courses"
-              className="text-sm md:text-base text-blue-600 hover:underline"
+              className="text-xs md:text-sm font-semibold text-[#7c3aed] hover:text-[#a855f7] transition"
             >
-              View All
+              View all →
             </Link>
           </div>
 
-          {recentCourses.length === 0 ? (
-            <div className="text-center py-12">
-              <BookOpenIcon className="w-12 h-12 md:w-16 md:h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-sm md:text-base text-gray-600 mb-4">No courses enrolled yet</p>
-              <Link
-                to="/courses"
-                className="inline-block bg-blue-600 text-white px-4 md:px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm md:text-base"
-              >
-                Browse Courses
-              </Link>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {recentCourses.map((course) => {
-                const studentProgress = course.userProgress || 0;
+          <div className="p-5 md:p-6">
+            {recentCourses.length === 0 ? (
+              <div className="text-center py-14">
+                <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <BookOpenIcon className="w-7 h-7 text-[#7c3aed]" />
+                </div>
+                <p className="text-sm font-semibold text-gray-700 mb-1">No courses yet</p>
+                <p className="text-xs text-gray-400 mb-5">Start your learning journey by browsing available courses.</p>
+                <Link
+                  to="/courses"
+                  className="inline-block bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 transition shadow-md"
+                >
+                  Browse courses
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
+                {recentCourses.map((course) => {
+                  const studentProgress = course.userProgress || 0;
+                  const isComplete = studentProgress === 100;
 
-                return (
-                  <Link
-                    key={course._id}
-                    to={`/student/watch/${course._id}`}
-                    className="border rounded-lg overflow-hidden hover:shadow-lg transition"
-                  >
-                    <img
-                      src={course.courseThumbnail || 'https://via.placeholder.com/400x200'}
-                      alt={course.courseTitle}
-                      className="w-full h-32 md:h-40 object-cover"
-                    />
-                    <div className="p-3 md:p-4">
-                      <h3 className="font-semibold mb-2 line-clamp-1 text-sm md:text-base">
-                        {course.courseTitle}
-                      </h3>
-                      <p className="text-xs md:text-sm text-gray-600 mb-3">
-                        {course.creator?.username}
-                      </p>
+                  return (
+                    <Link
+                      key={course._id}
+                      to={`/student/watch/${course._id}`}
+                      className="group border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg hover:border-purple-200 transition-all duration-300"
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative overflow-hidden">
+                        <img
+                          src={course.courseThumbnail || 'https://via.placeholder.com/400x200'}
+                          alt={course.courseTitle}
+                          className="w-full h-36 md:h-44 object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        {isComplete && (
+                          <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow">
+                            ✓ Done
+                          </span>
+                        )}
+                      </div>
 
-                      {/* Progress Bar */}
-                      <div className="mb-2">
-                        <div className="flex justify-between text-xs md:text-sm mb-1">
-                          <span className="text-gray-600">Progress</span>
-                          <span className="font-semibold">{studentProgress}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all"
-                            style={{ width: `${studentProgress}%` }}
-                          ></div>
+                      {/* Content */}
+                      <div className="p-4">
+                        <h3 className="font-semibold text-sm md:text-base text-black mb-1 line-clamp-1 group-hover:text-[#7c3aed] transition-colors">
+                          {course.courseTitle}
+                        </h3>
+                        <p className="text-xs text-gray-400 mb-3">
+                          by {course.creator?.username}
+                        </p>
+
+                        {/* Progress */}
+                        <div>
+                          <div className="flex justify-between text-xs mb-1.5">
+                            <span className="text-gray-400">Progress</span>
+                            <span className={`font-semibold ${isComplete ? 'text-green-600' : 'text-[#7c3aed]'}`}>
+                              {studentProgress}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-100 rounded-full h-1.5">
+                            <div
+                              className={`h-1.5 rounded-full transition-all duration-500 ${isComplete ? 'bg-green-500' : 'bg-gradient-to-r from-[#7c3aed] to-[#a855f7]'}`}
+                              style={{ width: `${studentProgress}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
+
       </div>
     </div>
   );
