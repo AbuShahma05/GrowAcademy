@@ -21,11 +21,9 @@ const EyeOffIcon = () => (
 
 // ─────────────────────────────────────────────────────────────────────
 const Login = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // NEW ↓ show/hide state
   const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
@@ -34,84 +32,125 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
-
+    setError('');
     const result = await login(formData.email, formData.password);
-
     if (result.success) {
-      navigate("/");
+      navigate('/');
     } else {
       setError(result.message);
     }
     setLoading(false);
   };
 
+  const inputCls =
+    'w-full px-4 py-2.5 md:py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-[#7c3aed] text-sm md:text-base transition';
+
   return (
-    <div className='min-h-screen flex items-center justify-center bg-neutral-200 px-4 py-8'>
-      <div className='bg-white p-6 md:p-8 rounded-lg shadow-md w-full max-w-md'>
-        <h2 className='text-2xl md:text-3xl font-bold mb-6 text-center'>
-          Login
-        </h2>
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 py-10 overflow-x-hidden">
+      <div className="w-full max-w-md">
 
-        {error && (
-          <div className='bg-red-100 text-red-700 p-3 rounded mb-4 text-sm md:text-base'>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className='space-y-4'>
-
-          {/* Email — UNCHANGED */}
-          <div>
-            <label className='block mb-2 text-sm md:text-base'>Email</label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className='w-full px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base'
-              required
-            />
-          </div>
-
-          {/* Password — NEW: show/hide toggle added */}
-          <div>
-            <label className='block mb-2 text-sm md:text-base'>Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className='w-full px-4 py-2 md:py-3 pr-11 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base'
-                required
-              />
-              {/* 👁 Show / Hide toggle */}
-              <button
-                type="button"
-                onClick={() => setShowPassword(v => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
-                title={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </button>
-            </div>
-          </div>
-
-          {/* Submit — UNCHANGED */}
-          <button
-            type='submit'
-            disabled={loading}
-            className='w-full bg-black text-white py-2 md:py-3 rounded-xl hover:bg-[#fb7241] disabled:bg-gray-400 transition text-sm md:text-base font-semibold'
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <p className='mt-4 text-center text-sm md:text-base'>
+        {/* ── Eyebrow + heading ── */}
+        <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3 text-center">
+          Welcome Back
+        </p>
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-center text-black">
+          Log in to your{' '}
+          <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+            account
+          </span>
+        </h1>
+        <p className="text-center text-sm text-gray-500 mb-8">
           Don't have an account?{' '}
-          <Link to="/register" className="text-black hover:text-[#fb7241]">
+          <Link to="/register" className="text-[#7c3aed] font-semibold hover:text-[#a855f7] transition">
             Sign up
           </Link>
         </p>
+
+        {/* ── Card ── */}
+        <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+
+          {/* Error banner */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl mb-5 text-sm flex items-start gap-2">
+              <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-5.25a.75.75 0 001.5 0v-3.5a.75.75 0 00-1.5 0v3.5zm.75-6a.75.75 0 100 1.5.75.75 0 000-1.5z" clipRule="evenodd" />
+              </svg>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-5 text-black">
+
+            {/* Email */}
+            <div>
+              <label className="block mb-2 font-semibold text-sm text-gray-800">Email</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="you@example.com"
+                className={inputCls}
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="font-semibold text-sm text-gray-800">Password</label>
+                <span className="text-xs text-[#7c3aed] hover:text-[#a855f7] cursor-pointer transition font-medium">
+                  Forgot password?
+                </span>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="Enter your password"
+                  className={`${inputCls} pr-11`}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#7c3aed] transition"
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white py-3 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-md disabled:opacity-60 text-sm md:text-base mt-1"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                  Logging in…
+                </span>
+              ) : (
+                'Log In'
+              )}
+            </button>
+
+          </form>
+        </div>
+
+        {/* Footer note */}
+        <p className="text-center text-xs text-gray-400 mt-6">
+          By logging in you agree to our{' '}
+          <span className="text-[#7c3aed] hover:underline cursor-pointer">Terms of Service</span>
+          {' '}and{' '}
+          <span className="text-[#7c3aed] hover:underline cursor-pointer">Privacy Policy</span>.
+        </p>
+
       </div>
     </div>
   );
