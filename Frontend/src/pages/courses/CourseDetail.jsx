@@ -8,7 +8,12 @@ import {
   StarIcon,
   PlayIcon,
   CheckCircleIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  AcademicCapIcon,
+  DevicePhoneMobileIcon,
+  TrophyIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from '@heroicons/react/24/outline';
 
 const CourseDetail = () => {
@@ -19,6 +24,9 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [showAllLectures, setShowAllLectures] = useState(false);
+
+  const LECTURE_PREVIEW_COUNT = 5;
 
   useEffect(() => {
     fetchCourseDetails();
@@ -29,7 +37,6 @@ const CourseDetail = () => {
       const { data } = await API.get(`/course/${id}`);
       if (data.success) {
         setCourse(data.data);
-
         if (user) {
           const enrolled = data.data.enrolledStudents?.some(
             (student) => student.studentId === user._id
@@ -49,28 +56,18 @@ const CourseDetail = () => {
       navigate('/login');
       return;
     }
-
     try {
       setEnrolling(true);
-
       const { data } = await API.post(`/course/${id}/enroll`);
-
       if (data.success) {
         try {
-          await API.post('/progress/create', {
-            userId: user._id,
-            courseId: id
-          });
+          await API.post('/progress/create', { userId: user._id, courseId: id });
         } catch (progressError) {
           console.log('Progress init error:', progressError);
         }
-
         setIsEnrolled(true);
         alert('Successfully enrolled in course!');
-
-        setTimeout(() => {
-          navigate(`/student/watch/${id}`);
-        }, 1000);
+        setTimeout(() => navigate(`/student/watch/${id}`), 1000);
       }
     } catch (error) {
       console.error('Enrollment error:', error);
@@ -80,243 +77,290 @@ const CourseDetail = () => {
     }
   };
 
+  const visibleLectures = showAllLectures
+    ? course?.lectures
+    : course?.lectures?.slice(0, LECTURE_PREVIEW_COUNT);
+
+  /* ── Loading ── */
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c3aed]" />
+        <p className="text-gray-500 text-sm">Loading course details…</p>
       </div>
     );
   }
 
+  /* ── Not found ── */
   if (!course) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-gray-600">Course not found</p>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-md px-12">
+          <p className="text-xl text-gray-500">Course not found</p>
+          <p className="text-sm text-gray-400 mt-2">This course may have been removed or does not exist.</p>
+          <button
+            onClick={() => navigate('/courses')}
+            className="mt-6 px-6 py-2 rounded-lg bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white text-sm font-semibold hover:opacity-90 transition"
+          >
+            Back to Catalog
+          </button>
+        </div>
       </div>
     );
   }
 
+  const EnrollButton = ({ fullWidth = false, showPrice = false }) => (
+    isEnrolled ? (
+      <button
+        onClick={() => navigate(`/student/watch/${id}`)}
+        className={`${fullWidth ? 'w-full' : ''} bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 px-6 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-md`}
+      >
+        Go to Course →
+      </button>
+    ) : (
+      <button
+        onClick={handleEnroll}
+        disabled={enrolling}
+        className={`${fullWidth ? 'w-full' : ''} bg-gradient-to-r from-[#7c3aed] to-[#a855f7] text-white py-3 px-6 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-md disabled:opacity-60`}
+      >
+        {enrolling ? 'Enrolling…' : showPrice ? `Enroll Now — ₹${course.coursePrice}` : 'Enroll Now'}
+      </button>
+    )
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Back Button - Mobile */}
-      <div className="md:hidden bg-white border-b px-4 py-3">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-          Back
-        </button>
-      </div>
+    <div className="min-h-screen bg-white overflow-x-hidden">
 
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-900 text-white py-8 md:py-16">
-        <div className="container mx-auto px-12">
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-            {/* Left Side - Course Info */}
-            <div>
-              {/* Back Button - Desktop */}
-              <button
-                onClick={() => navigate(-1)}
-                className="hidden md:flex items-center gap-2 text-white/80 hover:text-white mb-4"
-              >
-                <ArrowLeftIcon className="w-5 h-5" />
-                Back to Courses
-              </button>
+      {/* ─── HERO ─── */}
+      <section className="relative py-10 md:py-16 overflow-hidden mx-4 sm:mx-6 md:mx-10 lg:mx-16">
+        <div className="relative z-10 container px-6 mx-auto md:px-12">
 
-              <div className="flex items-center gap-2 mb-3 md:mb-4 flex-wrap">
-                <span className="bg-black text-white px-3 py-1 rounded-lg text-xs md:text-sm font-semibold">
-                  {course.category}
-                </span>
-                <span className="bg-black bg-opacity-20 px-3 py-1 rounded-lg text-xs md:text-sm">
-                  {course.courseLevel}
-                </span>
-              </div>
-
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4">
-                {course.courseTitle}
-              </h1>
-              <p className="text-base md:text-xl mb-4 md:mb-6">{course.subTitle}</p>
-
-              <div className="flex items-center gap-4 md:gap-6 md:mb-6 flex-wrap text-sm md:text-base">
-                <div className="flex items-center gap-2">
-                  <StarIcon className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>{course.averageRating.toFixed(1)} ({course.totalRatings} ratings)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <UserGroupIcon className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>{course.totalEnrollments} students</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 md:gap-4">
-                <img
-                  src={course.creator?.photoUrl || 'https://via.placeholder.com/50'}
-                  alt={course.creator?.username}
-                  className="w-5 h-5 md:w-12 md:h-12 rounded-full"
-                />
-                <div>
-                  <p className="text-xs md:text-sm">Created by</p>
-                  <p className="font-semibold text-sm md:text-base">{course.creator?.username}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side - Course Card (Hidden on mobile in hero) */}
-            <div className="hidden md:block bg-white rounded-lg p-6 text-gray-900 shadow-xl">
-              <img
-                src={course.courseThumbnail || 'https://via.placeholder.com/400x300'}
-                alt={course.courseTitle}
-                className="w-full rounded-lg mb-4"
-              />
-
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  {course.originalPrice && (
-                    <p className="text-gray-400 line-through text-sm md:text-base">₹{course.originalPrice}</p>
-                  )}
-                  <p className="text-2xl md:text-3xl font-bold text-blue-600">₹{course.coursePrice}</p>
-                </div>
-              </div>
-
-              {isEnrolled ? (
-                <button
-                  onClick={() => navigate(`/student/watch/${id}`)}
-                  className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
-                >
-                  Go to Course
-                </button>
-              ) : (
-                <button
-                  onClick={handleEnroll}
-                  disabled={enrolling}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400"
-                >
-                  {enrolling ? 'Enrolling...' : 'Enroll Now'}
-                </button>
-              )}
-
-              <div className="mt-4 space-y-2">
-                <div className="flex items-center gap-2 text-sm">
-                  <ClockIcon className="w-5 h-5 text-blue-600" />
-                  <span>{course.totalDuration} minutes total</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <PlayIcon className="w-5 h-5 text-blue-600" />
-                  <span>{course.totalLectures} lectures</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sticky Purchase Card - Mobile Only */}
-      <div className="md:hidden sticky top-0 z-40 bg-white border-b shadow-md p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            {course.originalPrice && (
-              <p className="text-gray-400 line-through text-xs">₹{course.originalPrice}</p>
-            )}
-            <p className="text-xl font-bold text-blue-600">₹{course.coursePrice}</p>
-          </div>
-          {isEnrolled ? (
+          {/* Back + Eyebrow */}
+          <div className="flex items-center gap-3 mb-3">
             <button
-              onClick={() => navigate(`/student/watch/${id}`)}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition"
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#7c3aed] transition"
             >
-              Go to Course
+              <ArrowLeftIcon className="w-4 h-4" />
+              Back
             </button>
-          ) : (
-            <button
-              onClick={handleEnroll}
-              disabled={enrolling}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400"
-            >
-              {enrolling ? 'Enrolling...' : 'Enroll'}
-            </button>
+            <span className="text-gray-300">·</span>
+            <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase">
+              Course Detail
+            </p>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-black leading-tight">
+            {course.courseTitle.split(' ').slice(0, -2).join(' ')}{' '}
+            <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+              {course.courseTitle.split(' ').slice(-2).join(' ')}
+            </span>
+          </h1>
+
+          {/* Subtitle */}
+          {course.subTitle && (
+            <p className="text-gray-500 text-sm md:text-base mb-5 max-w-2xl">{course.subTitle}</p>
           )}
-        </div>
-      </div>
 
-      {/* Course Content */}
-      <div className="container mx-auto px-4 py-6 md:py-12">
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {/* Main Content */}
-          <div className="md:col-span-2 space-y-6 md:space-y-8">
-            {/* Description */}
-            <div className="bg-white rounded-lg p-4 md:p-6 shadow-md">
-              <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">About this course</h2>
-              <p className="text-sm md:text-base text-gray-700 whitespace-pre-line">{course.description}</p>
-            </div>
+          {/* Meta pills */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            <span className="text-xs bg-purple-100 text-[#7c3aed] px-3 py-1 rounded-full font-semibold">
+              {course.category}
+            </span>
+            <span className="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full font-medium">
+              {course.courseLevel}
+            </span>
+            <span className="flex items-center gap-1 text-xs bg-amber-50 text-amber-600 px-3 py-1 rounded-full font-medium">
+              <StarIcon className="w-3.5 h-3.5" />
+              {course.averageRating.toFixed(1)} ({course.totalRatings} ratings)
+            </span>
+            <span className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">
+              <UserGroupIcon className="w-3.5 h-3.5" />
+              {course.totalEnrollments} students
+            </span>
+          </div>
 
-            {/* Lectures */}
-            {course.lectures && course.lectures.length > 0 && (
-              <div className="bg-white rounded-lg p-4 md:p-6 shadow-md">
-                <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Course Content</h2>
-                <div className="space-y-2">
-                  {course.lectures.map((lecture, index) => (
-                    <div
-                      key={lecture._id}
-                      className="flex items-center justify-between p-3 md:p-4 border rounded hover:bg-gray-50"
-                    >
-                      <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
-                        <span className="text-gray-500 text-sm md:text-base">{index + 1}.</span>
-                        <PlayIcon className="w-4 h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0" />
-                        <span className="text-sm md:text-base truncate">{lecture.title}</span>
-                      </div>
-                      <span className="text-xs md:text-sm text-gray-500 flex-shrink-0 ml-2">
-                        {lecture.duration} min
+          {/* Main Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            {/* ── Left / Main ── */}
+            <div className="lg:col-span-2 space-y-5">
+
+              {/* Thumbnail – mobile only */}
+              <div className="lg:hidden rounded-2xl overflow-hidden border border-gray-200 shadow-md">
+                <img
+                  src={course.courseThumbnail || 'https://via.placeholder.com/800x400'}
+                  alt={course.courseTitle}
+                  className="w-full h-48 object-cover"
+                />
+              </div>
+
+              {/* Instructor */}
+              <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+                <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3">Instructor</p>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={course.creator?.photoUrl || 'https://via.placeholder.com/80'}
+                    alt={course.creator?.username}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-100"
+                  />
+                  <div>
+                    <p className="font-bold text-gray-900 text-base">{course.creator?.username}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Course Creator</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* About */}
+              <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+                <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3">About this course</p>
+                <p className="text-sm md:text-base text-gray-700 whitespace-pre-line leading-relaxed">
+                  {course.description}
+                </p>
+              </div>
+
+              {/* Course Content */}
+              {course.lectures && course.lectures.length > 0 && (
+                <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase">Course Content</p>
+                    <div className="flex items-center gap-3 text-xs text-gray-400">
+                      <span className="flex items-center gap-1">
+                        <PlayIcon className="w-3.5 h-3.5" />
+                        {course.lectures.length} lectures
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ClockIcon className="w-3.5 h-3.5" />
+                        {course.totalDuration} min total
                       </span>
                     </div>
-                  ))}
+                  </div>
+
+                  <div className="space-y-2">
+                    {visibleLectures.map((lecture, index) => (
+                      <div
+                        key={lecture._id}
+                        className="flex items-center justify-between p-3 md:p-4 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/40 transition-all duration-200 group"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className="text-xs font-bold text-gray-300 w-5 text-right flex-shrink-0">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <div className="w-8 h-8 rounded-full bg-purple-100 group-hover:bg-purple-200 flex items-center justify-center flex-shrink-0 transition">
+                            <PlayIcon className="w-3.5 h-3.5 text-[#7c3aed]" />
+                          </div>
+                          <span className="text-sm text-gray-800 truncate">{lecture.title}</span>
+                        </div>
+                        <span className="text-xs text-gray-400 flex-shrink-0 ml-2 bg-gray-100 px-2 py-0.5 rounded-full">
+                          {lecture.duration} min
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {course.lectures.length > LECTURE_PREVIEW_COUNT && (
+                    <button
+                      onClick={() => setShowAllLectures(!showAllLectures)}
+                      className="mt-4 w-full flex items-center justify-center gap-2 text-sm font-semibold text-[#7c3aed] hover:text-[#a855f7] transition py-2 rounded-xl border border-purple-100 hover:border-purple-300 hover:bg-purple-50/50"
+                    >
+                      {showAllLectures ? (
+                        <><ChevronUpIcon className="w-4 h-4" /> Show less</>
+                      ) : (
+                        <><ChevronDownIcon className="w-4 h-4" /> Show {course.lectures.length - LECTURE_PREVIEW_COUNT} more lectures</>
+                      )}
+                    </button>
+                  )}
                 </div>
+              )}
+
+              {/* Mobile Enroll CTA */}
+              <div className="lg:hidden">
+                <EnrollButton fullWidth showPrice />
               </div>
-            )}
+            </div>
+
+            {/* ── Right / Sidebar ── */}
+            <div className="hidden lg:block space-y-5">
+
+              {/* Sticky card */}
+              <div className="sticky top-6 space-y-5">
+
+                {/* Thumbnail */}
+                <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-md">
+                  <img
+                    src={course.courseThumbnail || 'https://via.placeholder.com/600x340'}
+                    alt={course.courseTitle}
+                    className="w-full h-72 object-cover"
+                  />
+                </div>
+
+                {/* Pricing + Enroll */}
+                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+                  <div className="mb-4">
+                    {course.originalPrice && (
+                      <p className="text-sm text-gray-400 line-through">₹{course.originalPrice}</p>
+                    )}
+                    <p className="text-3xl font-bold bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+                      ₹{course.coursePrice}
+                    </p>
+                    {course.originalPrice && (
+                      <span className="inline-block mt-1 text-xs bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">
+                        {Math.round((1 - course.coursePrice / course.originalPrice) * 100)}% off
+                      </span>
+                    )}
+                  </div>
+
+                  <EnrollButton fullWidth />
+
+                  <p className="text-center text-xs text-gray-400 mt-3">30-day money-back guarantee</p>
+                </div>
+
+                {/* Course includes */}
+                <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300">
+                  <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-4">This course includes</p>
+                  <ul className="space-y-3">
+                    {[
+                      { Icon: ClockIcon, text: `${course.totalDuration} minutes of content` },
+                      { Icon: PlayIcon, text: `${course.totalLectures} on-demand lectures` },
+                      { Icon: DevicePhoneMobileIcon, text: 'Access on mobile & desktop' },
+                      { Icon: AcademicCapIcon, text: 'Lifetime access' },
+                      { Icon: TrophyIcon, text: 'Certificate of completion' },
+                    ].map(({ Icon, text }) => (
+                      <li key={text} className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+                          <Icon className="w-4 h-4 text-[#7c3aed]" />
+                        </div>
+                        <span className="text-sm text-gray-700">{text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+              </div>
+            </div>
           </div>
 
-          {/* Sidebar - Desktop Only */}
-          <div className="hidden md:block space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-md sticky top-4">
-              <h3 className="font-bold mb-4">This course includes:</h3>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-sm">Lifetime access</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-sm">Certificate of completion</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0" />
-                  <span className="text-sm">Access on mobile and desktop</span>
-                </li>
-              </ul>
-            </div>
+        </div>
+      </section>
+
+      {/* ─── MOBILE STICKY BOTTOM CTA ─── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-gray-200 shadow-xl p-4 z-50">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex-shrink-0">
+            {course.originalPrice && (
+              <p className="text-xs text-gray-400 line-through">₹{course.originalPrice}</p>
+            )}
+            <p className="text-xl font-bold bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+              ₹{course.coursePrice}
+            </p>
+          </div>
+          <div className="flex-1">
+            <EnrollButton fullWidth showPrice={!isEnrolled} />
           </div>
         </div>
       </div>
 
-      {/* Mobile Bottom CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 z-40">
-        {isEnrolled ? (
-          <button
-            onClick={() => navigate(`/student/watch/${id}`)}
-            className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-600 transition"
-          >
-            Go to Course
-          </button>
-        ) : (
-          <button
-            onClick={handleEnroll}
-            disabled={enrolling}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400"
-          >
-            {enrolling ? 'Enrolling...' : `Enroll Now - ₹${course.coursePrice}`}
-          </button>
-        )}
-      </div>
     </div>
   );
 };
