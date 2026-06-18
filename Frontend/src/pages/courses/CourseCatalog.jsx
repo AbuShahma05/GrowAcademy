@@ -51,128 +51,144 @@ const CourseCatalog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-200 py-6 md:py-12">
-      <div className="container mx-auto px-12">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8">
-          Explore Courses
-        </h1>
+    <div className="min-h-screen bg-white overflow-x-hidden">
 
-        {/* Filters */}
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md mb-6 md:mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Search */}
-            <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search courses..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
-              />
-            </div>
+      {/* ─── HEADER ─── */}
+      <section className="relative py-10 md:py-16 overflow-hidden sm:mx-6 md:mx-10 lg:mx-16">
 
-            {/* Category Filter */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
-            >
-              <option value="">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+        <div className="relative z-10 container mx-auto md:px-12">
 
-            {/* Level Filter */}
-            <select
-              value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value)}
-              className="px-4 py-2 md:py-3 border rounded focus:outline-none focus:ring-1 focus:ring-black text-sm md:text-base"
-            >
-              <option value="">All Levels</option>
-              {levels.map((level) => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+          {/* Eyebrow label — same pattern as "Services" on Home */}
+          <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3">
+            Catalog
+          </p>
 
-        {/* Courses Grid */}
-        {loading ? (
-          <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600 text-sm md:text-base">Loading courses...</p>
-          </div>
-        ) : courses.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-lg md:text-xl text-gray-600">No courses found</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {courses.map((course) => (
-              <Link
-                key={course._id}
-                to={`/course/${course._id}`}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition"
-              >
-                <img
-                  src={course.courseThumbnail || 'https://via.placeholder.com/400x200'}
-                  alt={course.courseTitle}
-                  className="w-full h-40 md:h-48 object-cover"
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 md:mb-8 text-black">
+            Explore{" "}
+            <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+              Courses
+            </span>
+          </h1>
+
+          {/* Filters */}
+          <div className="bg-white text-black p-4 md:p-6 rounded-2xl border border-gray-400 mb-6 md:mb-8 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 cursor-pointer">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Search */}
+              <div className="relative">
+                <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Search courses..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 md:py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-[#7c3aed] text-sm md:text-base transition"
                 />
-                <div className="p-4 md:p-6">
-                  <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <span className="text-xs bg-blue-100 text-black px-2 py-1 rounded">
-                      {course.category}
-                    </span>
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                      {course.courseLevel}
-                    </span>
-                  </div>
+              </div>
 
-                  <h3 className="text-base md:text-xl font-semibold mb-2 line-clamp-2">
-                    {course.courseTitle}
-                  </h3>
+              {/* Category Filter */}
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-4 py-2 md:py-3 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-[#7c3aed] text-sm md:text-base transition"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
 
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {course.subTitle || course.description}
-                  </p>
-
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={course.creator?.photoUrl || 'https://via.placeholder.com/40'}
-                        alt={course.creator?.username}
-                        className="w-9 h-9 md:w-11 md:h-11 rounded-full object-cover border"
-                      />
-
-                      <span className="text-xs md:text-sm font-medium text-gray-900 truncate">
-                        {course.creator?.username}
-                      </span>
-
-                    </div>
-
-                    <div className="text-right">
-                      {course.originalPrice && (
-                        <p className="text-xs md:text-sm text-gray-400 line-through">
-                          ₹{course.originalPrice}
-                        </p>
-                      )}
-                      <p className="text-lg md:text-xl font-bold text-blue-600">
-                        ₹{course.coursePrice}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+              {/* Level Filter */}
+              <select
+                value={selectedLevel}
+                onChange={(e) => setSelectedLevel(e.target.value)}
+                className="px-4 py-2 md:py-3 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-[#7c3aed] text-sm md:text-base transition"
+              >
+                <option value="">All Levels</option>
+                {levels.map((level) => (
+                  <option key={level} value={level}>{level}</option>
+                ))}
+              </select>
+            </div>
           </div>
-        )}
-      </div>
+
+          {/* Courses Grid */}
+          {loading ? (
+            <div className="text-center py-20">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c3aed]"></div>
+              <p className="mt-4 text-gray-500 text-sm md:text-base">Loading courses...</p>
+            </div>
+          ) : courses.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-md">
+              <p className="text-lg md:text-xl text-gray-500">No courses found</p>
+              <p className="text-sm text-gray-500 mt-2">Try adjusting your search or filters</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {courses.map((course) => (
+                <Link
+                  key={course._id}
+                  to={`/course/${course._id}`}
+                  className="group bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden hover:shadow-2xl hover:border-purple-700 transition-all duration-300"
+                >
+                  <img
+                    src={course.courseThumbnail || 'https://via.placeholder.com/400x200'}
+                    alt={course.courseTitle}
+                    className="w-full h-40 md:h-48 object-cover"
+                  />
+                  <div className="p-4 md:p-6">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <span className="text-xs bg-purple-100 text-[#7c3aed] px-2 py-1 rounded-full font-medium">
+                        {course.category}
+                      </span>
+                      <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full font-medium">
+                        {course.courseLevel}
+                      </span>
+                    </div>
+
+                    <h3 className="text-base md:text-xl font-semibold mb-2 line-clamp-2 text-gray-900 group-hover:text-[#7c3aed] transition">
+                      {course.courseTitle}
+                    </h3>
+
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      {course.subTitle || course.description}
+                    </p>
+
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={course.creator?.photoUrl || 'https://via.placeholder.com/40'}
+                          alt={course.creator?.username}
+                          className="w-9 h-9 md:w-11 md:h-11 rounded-full object-cover border"
+                        />
+
+                        <span className="text-xs md:text-sm font-medium text-gray-900 truncate">
+                          {course.creator?.username}
+                        </span>
+
+                      </div>
+
+                      <div className="text-right">
+                        {course.originalPrice && (
+                          <p className="text-xs md:text-sm text-gray-400 line-through">
+                            ₹{course.originalPrice}
+                          </p>
+                        )}
+                        <p className="text-lg md:text-xl font-bold bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+                          ₹{course.coursePrice}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+        </div>
+      </section>
+
     </div>
   );
 };
-
 
 export default CourseCatalog;

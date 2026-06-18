@@ -110,7 +110,7 @@ const CourseDetail = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-8 md:py-16">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-900 text-white py-8 md:py-16">
         <div className="container mx-auto px-12">
           <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
             {/* Left Side - Course Info */}
