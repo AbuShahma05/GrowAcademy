@@ -116,7 +116,7 @@ const StudentDashboard = () => {
           {statCards.map((stat, index) => (
             <div
               key={index}
-              className={`bg-white rounded-2xl border ${stat.border} shadow-sm hover:shadow-md p-4 md:p-5 hover:border-purple-700 transition-all duration-300 cursor-pointer`}
+              className={`bg-white rounded-2xl border ${stat.border} shadow-md hover:shadow-md p-4 md:p-5 hover:border-purple-700 transition-all duration-300 cursor-pointer`}
             >
               <div className={`w-9 h-9 md:w-10 md:h-10 rounded-xl flex items-center justify-center mb-3 ${stat.iconBg} ${stat.accent.split(' ')[1]}`}>
                 {stat.icon}
@@ -128,7 +128,7 @@ const StudentDashboard = () => {
         </div>
 
         {/* ── Continue Learning ── */}
-        <div className="bg-white rounded-2xl border border-gray-300 shadow-sm hover:shadow-xl hover:border-purple-600 transition-all duration-300 overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-300 shadow-md hover:shadow-xl hover:border-purple-600 transition-all duration-300 overflow-hidden">
           <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-gray-100">
             <h2 className="text-base md:text-lg font-bold text-black">Continue learning</h2>
             <Link
