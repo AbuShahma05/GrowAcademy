@@ -54,9 +54,9 @@ const CourseCatalog = () => {
     <div className="min-h-screen bg-white overflow-x-hidden">
 
       {/* ─── HEADER ─── */}
-      <section className="relative py-10 md:py-16 overflow-hidden sm:mx-6 md:mx-10 lg:mx-16">
+      <section className="relative py-10 md:py-16 overflow-hidden mx-4 sm:mx-6 md:mx-10 lg:mx-16">
 
-        <div className="relative z-10 container mx-auto md:px-12">
+        <div className="relative z-10 container px-6 mx-auto md:px-12">
 
           {/* Eyebrow label — same pattern as "Services" on Home */}
           <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3">
