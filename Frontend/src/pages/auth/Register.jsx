@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { AcademicCapIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { AcademicCapIcon, BookOpenIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 
 // ── Password strength calculator ──────────────────────────────────────
 const getStrength = (password) => {
@@ -113,6 +113,7 @@ const Register = () => {
   const roles = [
     { value: 'Student', Icon: BookOpenIcon, label: 'Learn', sub: 'Student' },
     { value: 'Teacher', Icon: AcademicCapIcon, label: 'Teach', sub: 'Instructor' },
+    { value: 'Admin', Icon: ShieldCheckIcon, label: 'Manage', sub: 'Admin' },
   ];
 
   return (
@@ -190,8 +191,9 @@ const Register = () => {
                       {[1, 2, 3, 4, 5].map((seg) => (
                         <div
                           key={seg}
-                          className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${seg <= strength.score ? strength.color : 'bg-gray-200'
-                            }`}
+                          className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                            seg <= strength.score ? strength.color : 'bg-gray-200'
+                          }`}
                         />
                       ))}
                     </div>
@@ -259,35 +261,42 @@ const Register = () => {
               </div>
             </Field>
 
-            {/* Role selector — pill toggle */}
+            {/* Role selector — 3-column pill toggle */}
             <div>
               <label className="block mb-2 font-semibold text-sm text-gray-800">I want to…</label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 {roles.map(({ value, Icon, label, sub }) => (
                   <button
                     key={value}
                     type="button"
                     onClick={() => setFormData({ ...formData, role: value })}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 text-left ${formData.role === value
-                      ? 'border-[#7c3aed] bg-purple-50 text-[#7c3aed]'
-                      : 'border-gray-200 text-gray-600 hover:border-purple-300'
-                      }`}
+                    className={`flex flex-col items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all duration-200 text-center relative ${
+                      formData.role === value
+                        ? 'border-[#7c3aed] bg-purple-50 text-[#7c3aed]'
+                        : 'border-gray-200 text-gray-600 hover:border-purple-300'
+                    }`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition ${formData.role === value ? 'bg-purple-100' : 'bg-gray-100'
-                      }`}>
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold leading-none">{label}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
-                    </div>
+                    {/* Selected check mark */}
                     {formData.role === value && (
-                      <div className="ml-auto w-4 h-4 rounded-full bg-[#7c3aed] flex items-center justify-center flex-shrink-0">
+                      <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#7c3aed] flex items-center justify-center flex-shrink-0">
                         <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </div>
                     )}
+
+                    {/* Icon circle */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition ${
+                      formData.role === value ? 'bg-purple-100' : 'bg-gray-100'
+                    }`}>
+                      <Icon className="w-5 h-5" />
+                    </div>
+
+                    {/* Labels */}
+                    <div>
+                      <p className="text-sm font-bold leading-none">{label}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+                    </div>
                   </button>
                 ))}
               </div>
