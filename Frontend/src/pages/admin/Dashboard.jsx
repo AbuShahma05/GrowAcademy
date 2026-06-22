@@ -7,7 +7,7 @@ import {
     CurrencyDollarIcon,
     ChartBarIcon,
     CheckCircleIcon,
-    XCircleIcon
+    XCircleIcon,
 } from '@heroicons/react/24/outline';
 
 const AdminDashboard = () => {
@@ -18,7 +18,7 @@ const AdminDashboard = () => {
         totalCourses: 0,
         publishedCourses: 0,
         totalRevenue: 0,
-        totalPurchases: 0
+        totalPurchases: 0,
     });
     const [recentUsers, setRecentUsers] = useState([]);
     const [recentCourses, setRecentCourses] = useState([]);
@@ -30,39 +30,28 @@ const AdminDashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            // Fetch users
-            const usersRes = await API.get('/user/admin/users', {
-                params: { page: 1, limit: 5 }
-            });
-
-            // Fetch courses
-            const coursesRes = await API.get('/course', {
-                params: { page: 1, limit: 5 }
-            });
-
-            // Fetch purchase stats
+            const usersRes = await API.get('/user/admin/users', { params: { page: 1, limit: 5 } });
+            const coursesRes = await API.get('/course', { params: { page: 1, limit: 5 } });
             const purchaseRes = await API.get('/purchase/admin/stats');
 
             if (usersRes.data.success) {
                 const users = usersRes.data.users;
                 setRecentUsers(users);
-
                 setStats(prev => ({
                     ...prev,
                     totalUsers: usersRes.data.pagination.total,
                     totalStudents: users.filter(u => u.role === 'Student').length,
-                    totalTeachers: users.filter(u => u.role === 'Teacher').length
+                    totalTeachers: users.filter(u => u.role === 'Teacher').length,
                 }));
             }
 
             if (coursesRes.data.success) {
                 const courses = coursesRes.data.data;
                 setRecentCourses(courses);
-
                 setStats(prev => ({
                     ...prev,
                     totalCourses: coursesRes.data.pagination.totalCourses,
-                    publishedCourses: courses.filter(c => c.isPublished).length
+                    publishedCourses: courses.filter(c => c.isPublished).length,
                 }));
             }
 
@@ -70,7 +59,7 @@ const AdminDashboard = () => {
                 setStats(prev => ({
                     ...prev,
                     totalRevenue: purchaseRes.data.data.totalRevenue,
-                    totalPurchases: purchaseRes.data.data.totalPurchases
+                    totalPurchases: purchaseRes.data.data.totalPurchases,
                 }));
             }
         } catch (error) {
@@ -92,201 +81,234 @@ const AdminDashboard = () => {
         }
     };
 
+    const rolePill = (role) => {
+        if (role === 'Admin') return 'bg-red-100 text-red-700';
+        if (role === 'Teacher') return 'bg-blue-100 text-blue-700';
+        return 'bg-emerald-100 text-emerald-700';
+    };
+
     const statCards = [
         {
-            icon: <UserGroupIcon className="w-6 h-6 sm:w-8 sm:h-8" />,
-            title: "Total Users",
+            Icon: UserGroupIcon,
+            title: 'Total Users',
             value: stats.totalUsers,
-            color: "bg-blue-500",
-            subtext: `${stats.totalStudents} Students, ${stats.totalTeachers} Teachers`
+            bg: 'bg-blue-50', iconBg: 'bg-blue-100', iconColor: 'text-blue-600',
+            subtext: `${stats.totalStudents} Students · ${stats.totalTeachers} Teachers`,
         },
         {
-            icon: <BookOpenIcon className="w-6 h-6 sm:w-8 sm:h-8" />,
-            title: "Total Courses",
+            Icon: BookOpenIcon,
+            title: 'Total Courses',
             value: stats.totalCourses,
-            color: "bg-green-500",
-            subtext: `${stats.publishedCourses} Published`
+            bg: 'bg-emerald-50', iconBg: 'bg-emerald-100', iconColor: 'text-emerald-600',
+            subtext: `${stats.publishedCourses} Published`,
         },
         {
-            icon: <ChartBarIcon className="w-6 h-6 sm:w-8 sm:h-8" />,
-            title: "Total Purchases",
+            Icon: ChartBarIcon,
+            title: 'Total Purchases',
             value: stats.totalPurchases,
-            color: "bg-purple-500"
+            bg: 'bg-purple-50', iconBg: 'bg-purple-100', iconColor: 'text-[#7c3aed]',
         },
         {
-            icon: <CurrencyDollarIcon className="w-6 h-6 sm:w-8 sm:h-8" />,
-            title: "Total Revenue",
+            Icon: CurrencyDollarIcon,
+            title: 'Total Revenue',
             value: `₹${stats.totalRevenue.toLocaleString()}`,
-            color: "bg-yellow-500"
-        }
+            bg: 'bg-amber-50', iconBg: 'bg-amber-100', iconColor: 'text-amber-600',
+        },
     ];
 
+    /* ── Loading ── */
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#7c3aed]" />
+                <p className="text-gray-500 text-sm">Loading dashboard…</p>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
-            <div className="container mx-auto px-3 sm:px-4 lg:px-6">
-                <div className="mb-6 sm:mb-8">
-                    <h1 className="text-2xl sm:text-3xl font-bold mb-2">Admin Dashboard</h1>
-                    <p className="text-sm sm:text-base text-gray-600">Manage users, courses, and platform operations</p>
-                </div>
+        <div className="min-h-screen bg-white overflow-x-hidden">
+            <section className="relative py-10 md:py-16 mx-4 sm:mx-6 md:mx-10 lg:mx-16">
+                <div className="container px-6 mx-auto md:px-12">
 
-                {/* Stats Grid - Responsive */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                    {statCards.map((stat, index) => (
-                        <div key={index} className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                            <div className={`${stat.color} w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-white mb-3 sm:mb-4`}>
-                                {stat.icon}
+                    {/* ── Header ── */}
+                    <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-3">
+                        Admin
+                    </p>
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-black">
+                        Platform{' '}
+                        <span className="bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent">
+                            Dashboard
+                        </span>
+                    </h1>
+                    <p className="text-sm text-gray-500 mb-8 md:mb-10">
+                        Manage users, courses, and platform operations.
+                    </p>
+
+                    {/* ── Stat cards ── */}
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
+                        {statCards.map(({ Icon, title, value, bg, iconBg, iconColor, subtext }) => (
+                            <div
+                                key={title}
+                                className={`${bg} rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 p-4 md:p-6 flex flex-col items-center text-center`}
+                            >
+                                <div className={`${iconBg} w-11 h-11 rounded-full flex items-center justify-center mb-3`}>
+                                    <Icon className={`w-5 h-5 ${iconColor}`} />
+                                </div>
+                                <p className="text-xs text-gray-500 font-medium mb-1">{title}</p>
+                                <p className="text-xl md:text-3xl font-bold text-gray-900 truncate w-full text-center">{value}</p>
+                                {subtext && (
+                                    <p className="text-xs text-gray-400 mt-1">{subtext}</p>
+                                )}
                             </div>
-                            <h3 className="text-gray-600 text-xs sm:text-sm mb-1">{stat.title}</h3>
-                            <p className="text-2xl sm:text-3xl font-bold mb-1">{stat.value}</p>
-                            {stat.subtext && (
-                                <p className="text-xs sm:text-sm text-gray-500">{stat.subtext}</p>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-                    {/* Recent Users - Responsive Table */}
-                    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
-                            <h2 className="text-xl sm:text-2xl font-bold">Recent Users</h2>
-                            <Link to="/admin/users" className="text-sm sm:text-base text-blue-600 hover:underline">
-                                View All
-                            </Link>
-                        </div>
+                    {/* ── Two column grid ── */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                        {/* Mobile Card View */}
-                        <div className="block sm:hidden space-y-4">
-                            {recentUsers.map((user) => (
-                                <div key={user._id} className="border rounded-lg p-4 space-y-3">
-                                    <div className="flex items-start justify-between">
-                                        <div className="flex-1">
-                                            <p className="font-semibold text-sm">{user.username}</p>
-                                            <p className="text-xs text-gray-500 break-all">{user.email}</p>
-                                        </div>
-                                        {user.isActive ? (
-                                            <CheckCircleIcon className="w-5 h-5 text-green-500 flex-shrink-0 ml-2" />
-                                        ) : (
-                                            <XCircleIcon className="w-5 h-5 text-red-500 flex-shrink-0 ml-2" />
-                                        )}
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${user.role === 'Admin' ? 'bg-red-100 text-red-700' :
-                                                user.role === 'Teacher' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-green-100 text-green-700'
-                                            }`}>
-                                            {user.role}
-                                        </span>
-                                        <button
-                                            onClick={() => handleToggleUserStatus(user._id)}
-                                            className="text-blue-600 hover:underline text-xs font-medium"
-                                        >
-                                            {user.isActive ? 'Deactivate' : 'Activate'}
-                                        </button>
-                                    </div>
+                        {/* ── Recent Users ── */}
+                        <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 overflow-hidden">
+                            <div className="px-5 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                                <div>
+                                    <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-1">Users</p>
+                                    <h2 className="text-lg font-bold text-black">Recent Users</h2>
                                 </div>
-                            ))}
-                        </div>
+                                <Link
+                                    to="/admin/users"
+                                    className="text-xs font-semibold text-[#7c3aed] hover:text-[#a855f7] transition"
+                                >
+                                    View All →
+                                </Link>
+                            </div>
 
-                        {/* Desktop Table View */}
-                        <div className="hidden sm:block overflow-x-auto">
-                            <table className="w-full">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                        <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                                        <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                                        <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                        <th className="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200">
-                                    {recentUsers.map((user) => (
-                                        <tr key={user._id} className="hover:bg-gray-50">
-                                            <td className="px-3 md:px-4 py-4">
-                                                <div>
-                                                    <p className="font-semibold text-sm">{user.username}</p>
-                                                    <p className="text-xs text-gray-500 break-all">{user.email}</p>
-                                                </div>
-                                            </td>
-                                            <td className="px-3 md:px-4 py-4">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${user.role === 'Admin' ? 'bg-red-100 text-red-700' :
-                                                        user.role === 'Teacher' ? 'bg-blue-100 text-blue-700' :
-                                                            'bg-green-100 text-green-700'
-                                                    }`}>
-                                                    {user.role}
-                                                </span>
-                                            </td>
-                                            <td className="px-3 md:px-4 py-4">
-                                                {user.isActive ? (
-                                                    <CheckCircleIcon className="w-5 h-5 text-green-500" />
-                                                ) : (
-                                                    <XCircleIcon className="w-5 h-5 text-red-500" />
-                                                )}
-                                            </td>
-                                            <td className="px-3 md:px-4 py-4">
-                                                <button
-                                                    onClick={() => handleToggleUserStatus(user._id)}
-                                                    className="text-blue-600 hover:underline text-xs sm:text-sm"
-                                                >
-                                                    {user.isActive ? 'Deactivate' : 'Activate'}
-                                                </button>
-                                            </td>
+                            {/* Mobile cards */}
+                            <div className="sm:hidden divide-y divide-gray-100">
+                                {recentUsers.map((user) => (
+                                    <div key={user._id} className="p-4 hover:bg-purple-50/30 transition">
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="font-semibold text-sm text-gray-900 truncate">{user.username}</p>
+                                                <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                                            </div>
+                                            {user.isActive
+                                                ? <CheckCircleIcon className="w-5 h-5 text-emerald-500 flex-shrink-0 ml-2" />
+                                                : <XCircleIcon className="w-5 h-5 text-red-400 flex-shrink-0 ml-2" />
+                                            }
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${rolePill(user.role)}`}>
+                                                {user.role}
+                                            </span>
+                                            <button
+                                                onClick={() => handleToggleUserStatus(user._id)}
+                                                className={`text-xs font-semibold transition ${user.isActive ? 'text-amber-600 hover:text-amber-700' : 'text-emerald-600 hover:text-emerald-700'}`}
+                                            >
+                                                {user.isActive ? 'Deactivate' : 'Activate'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Desktop table */}
+                            <div className="hidden sm:block overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="bg-gray-50 border-b border-gray-100">
+                                            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">User</th>
+                                            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Role</th>
+                                            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                                            <th className="px-5 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100">
+                                        {recentUsers.map((user) => (
+                                            <tr key={user._id} className="hover:bg-purple-50/30 transition-colors duration-150 group">
+                                                <td className="px-5 py-3.5">
+                                                    <p className="font-semibold text-sm text-gray-900 group-hover:text-[#7c3aed] transition truncate max-w-[140px]">
+                                                        {user.username}
+                                                    </p>
+                                                    <p className="text-xs text-gray-400 truncate max-w-[140px]">{user.email}</p>
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${rolePill(user.role)}`}>
+                                                        {user.role}
+                                                    </span>
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    {user.isActive
+                                                        ? <CheckCircleIcon className="w-5 h-5 text-emerald-500" />
+                                                        : <XCircleIcon className="w-5 h-5 text-red-400" />
+                                                    }
+                                                </td>
+                                                <td className="px-5 py-3.5">
+                                                    <button
+                                                        onClick={() => handleToggleUserStatus(user._id)}
+                                                        className={`text-xs font-semibold transition ${user.isActive ? 'text-amber-600 hover:text-amber-700' : 'text-emerald-600 hover:text-emerald-700'}`}
+                                                    >
+                                                        {user.isActive ? 'Deactivate' : 'Activate'}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Recent Courses - Responsive */}
-                    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
-                            <h2 className="text-xl sm:text-2xl font-bold">Recent Courses</h2>
-                            <Link to="/admin/courses" className="text-sm sm:text-base text-blue-600 hover:underline">
-                                View All
-                            </Link>
-                        </div>
-
-                        <div className="space-y-3 sm:space-y-4">
-                            {recentCourses.map((course) => (
-                                <div key={course._id} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 border rounded hover:bg-gray-50">
-                                    <img
-                                        src={course.courseThumbnail || 'https://via.placeholder.com/80'}
-                                        alt={course.courseTitle}
-                                        className="w-full sm:w-16 md:w-20 h-40 sm:h-16 md:h-20 rounded object-cover flex-shrink-0"
-                                    />
-                                    <div className="flex-1 w-full sm:w-auto">
-                                        <h3 className="font-semibold text-sm sm:text-base line-clamp-1">{course.courseTitle}</h3>
-                                        <p className="text-xs sm:text-sm text-gray-600 mt-1">By {course.creator?.username}</p>
-                                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${course.isPublished
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-yellow-100 text-yellow-700'
-                                                }`}>
-                                                {course.isPublished ? 'Published' : 'Draft'}
-                                            </span>
-                                            <span className="text-xs sm:text-sm text-gray-500">
-                                                {course.totalEnrollments || 0} students
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="w-full sm:w-auto text-left sm:text-right">
-                                        <p className="font-bold text-base sm:text-lg text-blue-600">₹{course.coursePrice}</p>
-                                    </div>
+                        {/* ── Recent Courses ── */}
+                        <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-2xl hover:border-purple-700 transition-all duration-300 overflow-hidden">
+                            <div className="px-5 md:px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                                <div>
+                                    <p className="text-xs font-semibold tracking-widest text-[#7c3aed] uppercase mb-1">Courses</p>
+                                    <h2 className="text-lg font-bold text-black">Recent Courses</h2>
                                 </div>
-                            ))}
+                                <Link
+                                    to="/admin/courses"
+                                    className="text-xs font-semibold text-[#7c3aed] hover:text-[#a855f7] transition"
+                                >
+                                    View All →
+                                </Link>
+                            </div>
+
+                            <div className="divide-y divide-gray-100">
+                                {recentCourses.map((course) => (
+                                    <div
+                                        key={course._id}
+                                        className="flex items-center gap-4 px-5 md:px-6 py-4 hover:bg-purple-50/30 transition-colors duration-150 group"
+                                    >
+                                        <img
+                                            src={course.courseThumbnail || 'https://via.placeholder.com/80'}
+                                            alt={course.courseTitle}
+                                            className="w-14 h-14 rounded-xl object-cover border border-gray-100 flex-shrink-0"
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-semibold text-sm text-gray-900 truncate group-hover:text-[#7c3aed] transition">
+                                                {course.courseTitle}
+                                            </p>
+                                            <p className="text-xs text-gray-400 mt-0.5">By {course.creator?.username}</p>
+                                            <div className="flex items-center gap-2 mt-1.5">
+                                                <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${course.isPublished ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                                                    }`}>
+                                                    {course.isPublished ? 'Published' : 'Draft'}
+                                                </span>
+                                                <span className="text-xs text-gray-400">
+                                                    {course.totalEnrollments || 0} students
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm font-bold bg-gradient-to-r from-[#7c3aed] to-[#a855f7] bg-clip-text text-transparent flex-shrink-0">
+                                            ₹{course.coursePrice}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     );
 };
