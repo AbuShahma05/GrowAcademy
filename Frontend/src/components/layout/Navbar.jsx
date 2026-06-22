@@ -34,7 +34,7 @@ const Navbar = () => {
               Courses
             </Link>
 
-            <Link to="/" className="hover:text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
+            <Link to="/about" className="hover:text-white px-4 py-1 rounded-full hover:bg-[#7c3aed] transition text-center">
               About Us
             </Link>
 
