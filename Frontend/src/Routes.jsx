@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth.js';
 import Profile from './pages/Profile.jsx';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 // Import pages (create these next)
 import Home from './pages/Home';
@@ -46,6 +47,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/courses" element={<CourseCatalog />} />
       <Route path="/course/:id" element={<CourseDetail />} />
 

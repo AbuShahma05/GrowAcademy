@@ -38,7 +38,7 @@ const Navbar = () => {
               About Us
             </Link>
 
-            <Link to="/" className="flex items-center gap-1 underline underline-offset-8 px-4 py-1 rounded-full hover:bg-[#7c3aed] hover:text-white transition-all duration-300">
+            <Link to="/contact" className="flex items-center gap-1 underline underline-offset-8 px-4 py-1 rounded-full hover:bg-[#7c3aed] hover:text-white transition-all duration-300">
               Contact Us
               <MdArrowOutward />
             </Link>
